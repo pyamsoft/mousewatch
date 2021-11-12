@@ -1,0 +1,29 @@
+{
+  "name": "mousewatch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "yarn lint && node ./src/index.js",
+    "deploy:main": "yarn lint && bash ./bin/deploy 1",
+    "deploy:back": "yarn lint && bash ./bin/deploy 2",
+    "scale:main": "bash ./bin/scale mouse1",
+    "scale:back": "bash ./bin/scale mouse2",
+    "lint": "eslint ."
+  },
+  "engines": {
+    "node": ">=12.x"
+  },
+  "dependencies": {
+    "@runmeetly/cache-man": "0.2.1",
+    "axios": "0.24.0",
+    "discord.js": "12.5.1",
+    "dotenv": "8.2.0",
+    "eslint": "7.16.0",
+    "luxon": "1.25.0",
+    "node-fetch": "2.6.1"
+  },
+  "devDependencies": {
+    "prettier": "2.2.1"
+  }
+}

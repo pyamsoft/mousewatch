@@ -1,0 +1,30 @@
+#!/bin/sh
+
+cd "${HOME}/dev/Pyamsoft/stonk-bot" || {
+  printf -- 'Failed to cd into bot directory\n'
+  exit 1
+}
+
+readonly CONFIG_1="mouse1"
+readonly CONFIG_2="mouse2"
+
+config="$1"
+if [ "${config}" = "${CONFIG_1}" ]; then
+  yarn scale:mouse2 disable || {
+    printf -- 'Failed to scale down mouse2\n'
+  }
+  yarn scale:mouse1 enable || {
+    printf -- 'Failed to scale up mouse1\n'
+  }
+elif [ "${config}" = "${CONFIG_2}" ]; then
+  yarn scale:mouse1 disable || {
+    printf -- 'Failed to scale down mouse1\n'
+  }
+  yarn scale:mouse2 enable || {
+    printf -- 'Failed to scale up mouse2\n'
+  }
+else
+  printf -- 'Unknown config: %s\n' "${config}"
+  exit 1
+fi
+
