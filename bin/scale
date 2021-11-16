@@ -28,9 +28,9 @@ fi
 
 app=""
 if [ "${config}" = "${CONFIG_1}" ]; then
-  app="mousewatch-1"
+  app="mousewatch1"
 elif [ "${config}" = "${CONFIG_2}" ]; then
-  app="mousewatch-2"
+  app="mousewatch2"
 else
   printf -- 'Unknown config: %s\n' "${config}"
   exit 1
