@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const logger = require("../../../logger");
 const { Timers } = require("../../../timer");
 const { WATCH_INTERVAL } = require("../../constants");
 const Cache = require("../cache");
@@ -13,11 +14,19 @@ function createWatchCache() {
     get: function get(author, date) {
       const authorCache = cache.get(author.id);
       if (!authorCache) {
+        logger.log("Cannot remove non-existant: ", {
+          author: author.id,
+          date: dateKey(date),
+        });
         return null;
       }
 
       const cached = authorCache.get(dateKey(date));
       if (!cached) {
+        logger.log("Cannot get non-existant date-key in authorCache: ", {
+          author: author.id,
+          date: dateKey(date),
+        });
         return null;
       }
 
@@ -32,24 +41,36 @@ function createWatchCache() {
         cache.put(author.id, authorCache);
       }
 
+      const cancelTimer = Timers.setInterval(callback, WATCH_INTERVAL);
+
       authorCache.put(dateKey(date), {
         author,
         message,
         callback: () => {
-          Timers.clearInterval(callback);
+          logger.log("Clearing watch interval ", {
+            author: author.id,
+            date: dateKey(date),
+          });
+          Timers.clearInterval(cancelTimer);
         },
       });
-
-      Timers.setInterval(callback, WATCH_INTERVAL);
     },
 
     remove: function remove(author, date) {
       const authorCache = cache.get(author.id);
       if (!authorCache) {
+        logger.log("Cannot remove non-existant: ", {
+          author: author.id,
+          date: dateKey(date),
+        });
         return null;
       }
       const removed = authorCache.remove(dateKey(date));
       if (!removed) {
+        logger.log("Cannot remove non-existant date-key in authorCache: ", {
+          author: author.id,
+          date: dateKey(date),
+        });
         return null;
       }
 
@@ -85,6 +106,9 @@ function createWatchCache() {
     clear: function clear(author) {
       const authorCache = cache.get(author.id);
       if (!authorCache) {
+        logger.log("Cannot clear non-existant authorCache: ", {
+          author: author.id,
+        });
         return [];
       }
 

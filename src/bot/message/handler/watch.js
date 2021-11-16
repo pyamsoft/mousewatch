@@ -23,7 +23,16 @@ function hasAvailability(maybeCalendar) {
 // Can we optimize this to do just one lookup always and then respond to every watch request?
 function lookup({ author, oldMessage, message, requestedDate }) {
   return Calendar.dreamKey().then((calendar) => {
-    logger.log("Calendar availability for watch: ", calendar);
+    logger.log(
+      "Calendar availability for watch: ",
+      calendar.map((c) => {
+        const { date, ...rest } = c;
+        return {
+          ...rest,
+          date: formatDate(date),
+        };
+      })
+    );
     const maybeMatching = calendar.find((c) =>
       isSameDay(c.date, requestedDate)
     );
