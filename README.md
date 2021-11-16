@@ -7,7 +7,7 @@ Watches the Magic key endpoint for availability
 This is not currently a public bot, you need
 to make your own Discord App in the developer portal,
 and then pass your own bot tokens into `.env`
-along with a `prefix` (I use `$`)
+along with a `prefix` (I use `!mouse`)
 
 See the `env.default` file for the expected format.
 
@@ -24,10 +24,14 @@ followed by the date you wish to check for availability
 ```
  <In #general>
 
- me >  !mouse 11/12/2021
+ me >  !mouse show 01/04/2021
 
- bot > Availability on November 12, 2021
-         Disneyland: Available
-         California Adventue: Blocked
+ bot > Spots are AVAILABLE on Jan 4, 2022. https://disneyland.disney.go.com/passes/blockout-dates/
+
+ me >  !mouse watch 01/04/2021
+
+ bot > :thumbsup:
+ * A few minutes later... *
+ bot > Spots are AVAILABLE on Jan 4, 2022. https://disneyland.disney.go.com/passes/blockout-dates/
 
 ```
