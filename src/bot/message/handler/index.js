@@ -8,8 +8,8 @@ module.exports = {
     return Show.show({ oldMessage, message, content });
   },
 
-  watch: function watch({ oldMessage, message, content }) {
-    return Watch.watch({ message, oldMessage, content });
+  watch: function watch({ oldMessage, message, content, respond, addToDb }) {
+    return Watch.watch({ message, oldMessage, content, respond, addToDb });
   },
 
   cancel: function cancel({ oldMessage, message, content }) {

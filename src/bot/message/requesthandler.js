@@ -51,6 +51,8 @@ module.exports = {
           oldMessage,
           message,
           content: args,
+          respond: true,
+          addToDb: true,
         });
       case "cancel":
         return Commands.cancel({

@@ -3,8 +3,8 @@ const { BotConfig } = require("../../config");
 const Logger = require("../../logger");
 
 const logger = Logger.tag("db/index");
-const INSERT_WATCHES_QUERY = `INSERT INTO watches(user_id, watch_date) VALUES ($1, $2)`;
-const QUERY_WATCHES = `SELECT user_id, watch_date FROM watches`;
+const INSERT_WATCHES_QUERY = `INSERT INTO watches(user_id, user_name, message_id, channel_id, watch_date) VALUES ($1, $2, $3, $4, $5)`;
+const QUERY_WATCHES = `SELECT user_id, user_name, message_id, channel_id, watch_date FROM watches`;
 const REMOVE_SINGLE_WATCH = `DELETE FROM watches WHERE user_id = $1 AND watch_date = $2`;
 const REMOVE_ALL_WATCHES = `DELETE FROM watches WHERE user_id = $1`;
 
@@ -34,7 +34,13 @@ module.exports = {
     }
   },
 
-  addWatch: async function addWatch({ userId, watchDateString }) {
+  addWatch: async function addWatch({
+    userId,
+    userName,
+    messageId,
+    channelId,
+    watchDateString,
+  }) {
     if (!pool) {
       logger.warn("No DB Pool, no query.");
       return false;
@@ -43,13 +49,25 @@ module.exports = {
     try {
       logger.log("Add watch to DB: ", {
         userId,
+        userName,
+        messageId,
+        channelId,
         watchDateString,
       });
-      await pool.query(INSERT_WATCHES_QUERY, [userId, watchDateString]);
+      await pool.query(INSERT_WATCHES_QUERY, [
+        userId,
+        userName,
+        messageId,
+        channelId,
+        watchDateString,
+      ]);
       return true;
     } catch (e) {
       logger.error(e, "Error inserting watch to DB: ", {
         userId,
+        userName,
+        messageId,
+        channelId,
         watchDateString,
       });
       return false;

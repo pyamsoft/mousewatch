@@ -76,7 +76,10 @@ module.exports = {
     return Responder.respond({
       oldMessage,
       message,
-      post: Formatter.confirm(author),
+      post: Formatter.confirm(
+        author,
+        `Cancelled: ${requestedDate ? formatDate(requestedDate) : "ALL"}`
+      ),
     });
   },
 };

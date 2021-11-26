@@ -79,23 +79,36 @@ function stopWatching(date, message, content) {
   });
 }
 
-function beginWatching(date, message, content, callback) {
+function beginWatching(date, message, content, addToDb, callback) {
   logger.log("Begin watching date for availability", formatDate(date));
   cache.put(message, date, callback);
 
-  const { author } = message;
+  const { author, channel } = message;
+  if (!addToDb) {
+    return;
+  }
+
   Database.addWatch({
     userId: author.id,
+    userName: author.username,
+    messageId: message.id,
+    channelId: channel.id,
     watchDateString: content,
   }).then((result) => {
     if (result) {
       logger.log("Added watch to DB: ", {
         userId: author.id,
+        userName: author.username,
+        messageId: message.id,
+        channelId: channel.id,
         watchDateString: content,
       });
     } else {
       logger.warn("Failed adding watch to DB: ", {
         userId: author.id,
+        userName: author.username,
+        messageId: message.id,
+        channelId: channel.id,
         watchDateString: content,
       });
     }
@@ -103,7 +116,7 @@ function beginWatching(date, message, content, callback) {
 }
 
 module.exports = {
-  watch: function watch({ message, oldMessage, content }) {
+  watch: function watch({ message, oldMessage, content, respond, addToDb }) {
     // DateTime.now() throws an error about not being a method?
     const today = DateTime.local().set({
       hour: 0,
@@ -115,6 +128,10 @@ module.exports = {
     const { author } = message;
     const requestedDate = TimeParser.parse(content);
     if (!requestedDate || !requestedDate.isValid) {
+      if (!respond) {
+        logger.warn("Requested date is invalid, but NO_RESPOND is set");
+        return;
+      }
       return Responder.respond({
         oldMessage,
         message,
@@ -123,6 +140,13 @@ module.exports = {
     }
 
     if (requestedDate < today) {
+      stopWatching(requestedDate, message, content);
+
+      if (!respond) {
+        logger.warn("Requested date is before today, but NO_RESPOND is set");
+        return;
+      }
+
       return Responder.respond({
         oldMessage,
         message,
@@ -138,7 +162,7 @@ module.exports = {
     lookup({ author, oldMessage, message, requestedDate }).then((responded) => {
       if (!responded) {
         let found = false;
-        beginWatching(requestedDate, message, content, () => {
+        beginWatching(requestedDate, message, content, addToDb, () => {
           if (found) {
             logger.warn("Date has been found but callback still firing.", {
               date: formatDate(requestedDate),
@@ -167,10 +191,18 @@ module.exports = {
       }
     });
 
+    if (!respond) {
+      logger.warn("NO_RESPOND is set");
+      return;
+    }
+
     return Responder.respond({
       oldMessage,
       message,
-      post: Formatter.confirm(author),
+      post: Formatter.confirm(
+        author,
+        `Watching date: ${formatDate(requestedDate)}`
+      ),
     });
   },
 };

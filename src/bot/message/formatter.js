@@ -36,8 +36,8 @@ module.exports = {
     return this.respond(user, content);
   },
 
-  confirm: function confirm(user) {
-    return this.respond(user, `:thumbsup:`);
+  confirm: function confirm(user, content) {
+    return this.respond(user, `:thumbsup: ${content ? content : ""}`);
   },
 
   noMatchingDate: function noMatchingDate(user, date) {

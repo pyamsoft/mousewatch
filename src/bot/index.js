@@ -4,6 +4,7 @@ const EventEmitter = require("./eventemitter");
 const RequestHandler = require("./message/requesthandler");
 const { Client } = require("../client");
 const Database = require("./db");
+const Restore = require("./restore");
 
 const logger = Logger.tag("bot/index");
 
@@ -40,14 +41,20 @@ function validateMessage(
   return content.startsWith(prefix);
 }
 
+function onDatabaseRestored(rows) {
+  if (rows.length <= 0) {
+    return;
+  }
+
+  Restore.restoreWatches(rows);
+}
+
 function botWatchReady(emitter, { status }) {
   emitter.on("ready", () => {
     // This event will run if the bot starts, and logs in, successfully.
     logger.print(`Bot has started!`);
 
-    Database.getWatches().then((result) => {
-      logger.log("DB WATCHES: ", result);
-    });
+    Database.getWatches().then(onDatabaseRestored);
   });
 
   emitter.on("error", (error) => {
