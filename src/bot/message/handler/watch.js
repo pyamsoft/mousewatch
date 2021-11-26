@@ -6,6 +6,7 @@ const { DateTime } = require("luxon");
 const { isSameDay } = require("./calendar");
 const Logger = require("../../../logger");
 const Cache = require("./cache");
+const Database = require("../../db");
 
 const logger = Logger.tag("bot/message/handler/watch");
 const cache = Cache.getWatchCache();
@@ -55,15 +56,50 @@ function formatDate(date) {
   return date.toLocaleString(DateTime.DATE_MED);
 }
 
-function stopWatching(date, message) {
+function stopWatching(date, message, content) {
   logger.log("Clear existing watch for date", formatDate(date));
   const { author } = message;
   cache.remove(author, date);
+
+  Database.removeWatch({
+    userId: author.id,
+    watchDateString: content,
+  }).then((result) => {
+    if (result) {
+      logger.log("Removed watch from DB: ", {
+        userId: author.id,
+        watchDateString: content,
+      });
+    } else {
+      logger.warn("Failed removing watch from DB: ", {
+        userId: author.id,
+        watchDateString: content,
+      });
+    }
+  });
 }
 
-function beginWatching(date, message, callback) {
+function beginWatching(date, message, content, callback) {
   logger.log("Begin watching date for availability", formatDate(date));
   cache.put(message, date, callback);
+
+  const { author } = message;
+  Database.addWatch({
+    userId: author.id,
+    watchDateString: content,
+  }).then((result) => {
+    if (result) {
+      logger.log("Added watch to DB: ", {
+        userId: author.id,
+        watchDateString: content,
+      });
+    } else {
+      logger.warn("Failed adding watch to DB: ", {
+        userId: author.id,
+        watchDateString: content,
+      });
+    }
+  });
 }
 
 module.exports = {
@@ -96,13 +132,13 @@ module.exports = {
 
     const existingMessage = cache.get(author, requestedDate);
     if (existingMessage) {
-      stopWatching(requestedDate, existingMessage);
+      stopWatching(requestedDate, existingMessage, content);
     }
 
     lookup({ author, oldMessage, message, requestedDate }).then((responded) => {
       if (!responded) {
         let found = false;
-        beginWatching(requestedDate, message, () => {
+        beginWatching(requestedDate, message, content, () => {
           if (found) {
             logger.warn("Date has been found but callback still firing.", {
               date: formatDate(requestedDate),
@@ -119,7 +155,7 @@ module.exports = {
           lookup({ author, oldMessage, message, requestedDate }).then((res) => {
             if (res) {
               found = true;
-              stopWatching(requestedDate, message);
+              stopWatching(requestedDate, message, content);
             }
           });
         });

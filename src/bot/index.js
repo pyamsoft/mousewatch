@@ -3,6 +3,7 @@ const Status = require("./model/status");
 const EventEmitter = require("./eventemitter");
 const RequestHandler = require("./message/requesthandler");
 const { Client } = require("../client");
+const Database = require("./db");
 
 const logger = Logger.tag("bot/index");
 
@@ -43,11 +44,17 @@ function botWatchReady(emitter, { status }) {
   emitter.on("ready", () => {
     // This event will run if the bot starts, and logs in, successfully.
     logger.print(`Bot has started!`);
+
+    Database.getWatches().then((result) => {
+      logger.log("DB WATCHES: ", result);
+    });
   });
 
   emitter.on("error", (error) => {
     logger.error(error, "Bot has encountered an error!");
     status.setActivity("WEE WOO ERROR");
+
+    Database.shutdown();
     // TODO clear watchers
   });
 }

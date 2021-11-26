@@ -21,7 +21,8 @@
     "dotenv": "8.2.0",
     "eslint": "7.16.0",
     "luxon": "1.25.0",
-    "node-fetch": "2.6.1"
+    "node-fetch": "2.6.1",
+    "pg": "8.7.1"
   },
   "devDependencies": {
     "prettier": "2.2.1"
