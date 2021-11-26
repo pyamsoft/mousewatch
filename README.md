@@ -11,8 +11,20 @@ along with a `prefix` (I use `!mouse`)
 
 See the `env.default` file for the expected format.
 
-# Running
+# Prepare
+
+You have the option of setting up a PostgresQL database which can store
+bot data persistently. The author uses Heroku's free tier, and uses
+the following commands to set up a database
+
+```bash
+$ heroku addons:create heroku-postgresql:hobby-dev
 ```
+
+You must then insert the DATABASE_URL into your `.env` file.
+
+# Running
+```bash
 $ node ./index.js
 ```
 
