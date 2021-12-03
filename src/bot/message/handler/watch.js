@@ -58,21 +58,30 @@ function formatDate(date) {
 
 function stopWatching(date, message, content) {
   logger.log("Clear existing watch for date", formatDate(date));
-  const { author } = message;
+  const { author, channel } = message;
   cache.remove(author, date);
 
-  Database.removeWatch({
+  Database.markWatchInvalid({
     userId: author.id,
+    userName: author.username,
+    messageId: message.id,
+    channelId: channel.id,
     watchDateString: content,
   }).then((result) => {
     if (result) {
-      logger.log("Removed watch from DB: ", {
+      logger.log("Invalidate watch from DB: ", {
         userId: author.id,
+        userName: author.username,
+        messageId: message.id,
+        channelId: channel.id,
         watchDateString: content,
       });
     } else {
-      logger.warn("Failed removing watch from DB: ", {
+      logger.warn("Failed invalidating watch from DB: ", {
         userId: author.id,
+        userName: author.username,
+        messageId: message.id,
+        channelId: channel.id,
         watchDateString: content,
       });
     }
