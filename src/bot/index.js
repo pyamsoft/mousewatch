@@ -51,7 +51,13 @@ function onDatabaseRestored(rows) {
     return;
   }
 
-  Restore.restoreWatches(rows);
+  Restore.restoreWatches(rows)
+    .then(() => {
+      logger.log("Restored all valid watches");
+    })
+    .catch((e) => {
+      logger.error(e, "Failed to restore watches");
+    });
 }
 
 function botWatchReady(emitter, { status }) {

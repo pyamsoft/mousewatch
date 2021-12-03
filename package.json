@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "yarn lint && node ./src/index.js",
+    "start": "yarn lint && node --trace-warnings ./src/index.js",
     "deploy:main": "yarn lint && bash ./bin/deploy 1",
     "deploy:back": "yarn lint && bash ./bin/deploy 2",
     "scale:main": "bash ./bin/scale mouse1",

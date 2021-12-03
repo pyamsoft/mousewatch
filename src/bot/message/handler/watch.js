@@ -196,13 +196,19 @@ module.exports = {
       return;
     }
 
+    const post = Formatter.confirm(
+      author,
+      `Watching date: ${formatDate(requestedDate)}`
+    );
+    logger.log("Attempt response: ", {
+      oldMessage,
+      message,
+      post,
+    });
     return Responder.respond({
       oldMessage,
       message,
-      post: Formatter.confirm(
-        author,
-        `Watching date: ${formatDate(requestedDate)}`
-      ),
+      post,
     });
   },
 };

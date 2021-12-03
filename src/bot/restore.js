@@ -6,7 +6,7 @@ const Database = require("./db");
 const logger = Logger.tag("bot/restore");
 
 module.exports = {
-  restoreWatches: function restoreWatches(watches) {
+  restoreWatches: async function restoreWatches(watches) {
     for (const watch of watches) {
       const userId = watch.user_id;
       const userName = watch.user_name;
@@ -23,15 +23,34 @@ module.exports = {
 
       let discordChannel;
       if (Client.channels.cache) {
-        discordChannel = Client.channels.cache.get(channelId);
-      } else {
-        discordChannel = Client.channels.fetch(channelId);
+        try {
+          discordChannel = await Client.channels.cache.get(channelId);
+        } catch (e) {
+          logger.error(
+            e,
+            "Failed to find discord channel in cache: ",
+            channelId
+          );
+          discordChannel = null;
+        }
+      }
+
+      if (!discordChannel) {
+        try {
+          discordChannel = Client.channels.fetch(channelId);
+        } catch (e) {
+          logger.error(e, "Failed to fetch discord channel: ", channelId);
+          discordChannel = null;
+        }
       }
 
       if (!discordChannel) {
         logger.error("Could not find discordChannel for watch ", watch);
-        Database.removeWatch({
+        Database.markWatchInvalid({
           userId,
+          userName,
+          messageId,
+          channelId,
           watchDateString: messageContent,
         });
         continue;

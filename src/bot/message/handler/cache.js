@@ -1,8 +1,10 @@
 const { DateTime } = require("luxon");
-const logger = require("../../../logger");
 const { Timers } = require("../../../timer");
 const { WATCH_INTERVAL } = require("../../constants");
 const Cache = require("../cache");
+const Logger = require("../../../logger");
+
+const logger = Logger.tag("bot/message/handler/cache");
 
 function dateKey(date) {
   return date.toLocaleString(DateTime.DATE_MED);
