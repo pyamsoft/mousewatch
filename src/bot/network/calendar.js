@@ -33,27 +33,7 @@ function getCacheFor(force, magicKey, numberMonths) {
   return cache.get(magicKey, numberMonths);
 }
 
-function availabilityToModel(availability) {
-  return availability
-    ? {
-        available: availability.available,
-        blocked: availability.blocked,
-      }
-    : {
-        available: false,
-        blocked: false,
-      };
-}
-
-function findAvailability(facilities, park) {
-  const parkAvailability = facilities.find((f) => f.facilityName === park);
-  return availabilityToModel(parkAvailability);
-}
-
 function createAvailability(json) {
-  const facilities = json.facilities || [];
-  const disneyland = findAvailability(facilities, "DLR_DP");
-  const californiaAdventure = findAvailability(facilities, "DLR_CA");
   return {
     // Clear times
     date: DateTime.fromISO(json.date).set({
@@ -62,11 +42,8 @@ function createAvailability(json) {
       second: 0,
       millisecond: 0,
     }),
-    available: disneyland.available || californiaAdventure.available,
-    availability: {
-      disneyland,
-      californiaAdventure,
-    },
+    available:
+      json.availability && json.availability !== "cms-key-no-availability",
   };
 }
 
