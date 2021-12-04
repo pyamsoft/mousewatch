@@ -33,7 +33,10 @@ module.exports = {
       });
     }
 
-    return Calendar.dreamKey().then((calendar) => {
+    const numberMonths = Math.ceil(
+      requestedDate.diff(today, "months").toObject().months
+    );
+    return Calendar.dreamKey(true, numberMonths).then((calendar) => {
       const maybeMatching = calendar.find((c) =>
         isSameDay(c.date, requestedDate)
       );

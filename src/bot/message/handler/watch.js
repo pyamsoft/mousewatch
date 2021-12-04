@@ -23,7 +23,17 @@ function hasAvailability(maybeCalendar) {
 // TODO Does one lookup per watch request
 // Can we optimize this to do just one lookup always and then respond to every watch request?
 function lookup({ author, oldMessage, message, requestedDate }) {
-  return Calendar.dreamKey().then((calendar) => {
+  const today = DateTime.local().set({
+    hour: 0,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+
+  const numberMonths = Math.ceil(
+    requestedDate.diff(today, "months").toObject().months
+  );
+  return Calendar.dreamKey(false, numberMonths).then((calendar) => {
     logger.log(
       "Calendar availability for watch: ",
       calendar.map((c) => {

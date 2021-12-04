@@ -10,18 +10,27 @@ const NUMBER_MONTHS = 3;
 
 const availabilityCaches = {};
 
-function getCacheFor(magicKey, numberMonths) {
+function getCacheFor(force, magicKey, numberMonths) {
   numberMonths = numberMonths || NUMBER_MONTHS;
+
+  // If force, bypass cache
+  if (force) {
+    return lookupCalendar(magicKey, numberMonths);
+  }
+
   const key = `${magicKey}|${numberMonths}`;
   let cache = availabilityCaches[key];
   if (!cache) {
-    cache = CacheMan.create(() => lookupCalendar(magicKey, numberMonths), {
-      backend: MemoryStorageBackend.create(CACHE_INTERVAL),
-    });
+    cache = CacheMan.create(
+      (magicKey, numberMonths) => lookupCalendar(magicKey, numberMonths),
+      {
+        backend: MemoryStorageBackend.create(CACHE_INTERVAL),
+      }
+    );
     availabilityCaches[key] = cache;
   }
 
-  return cache.get();
+  return cache.get(magicKey, numberMonths);
 }
 
 function availabilityToModel(availability) {
@@ -84,19 +93,19 @@ function lookupCalendar(magicKey, numberMonths) {
 }
 
 module.exports = {
-  dreamKey: function dreamKey(numberMonths) {
-    return getCacheFor("dream-key-pass", numberMonths);
+  dreamKey: function dreamKey(force, numberMonths) {
+    return getCacheFor(force, "dream-key-pass", numberMonths);
   },
 
-  believeKey: function dreamKey(numberMonths) {
-    return getCacheFor("believe-key-pass", numberMonths);
+  believeKey: function dreamKey(force, numberMonths) {
+    return getCacheFor(force, "believe-key-pass", numberMonths);
   },
 
-  enchantKey: function dreamKey(numberMonths) {
-    return getCacheFor("enchant-key-pass", numberMonths);
+  enchantKey: function dreamKey(force, numberMonths) {
+    return getCacheFor(force, "enchant-key-pass", numberMonths);
   },
 
-  imagineKey: function dreamKey(numberMonths) {
-    return getCacheFor("imagine-key-pass", numberMonths);
+  imagineKey: function dreamKey(force, numberMonths) {
+    return getCacheFor(force, "imagine-key-pass", numberMonths);
   },
 };
