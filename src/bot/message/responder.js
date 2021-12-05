@@ -42,14 +42,6 @@ function editMessage(post, oldMessage, message) {
   cachedMessage
     .edit(post)
     .then((sent) => {
-      logger.log("Message edited: ", {
-        oldMessage: {
-          id: oldMessage.id,
-          content: oldMessage.content,
-        },
-        message: { id: message.id, content: message.content },
-        post,
-      });
       cache.put(message.id, sent);
     })
     .catch((e) => {
@@ -70,14 +62,6 @@ function postMessage(post, message) {
   channel
     .send(post)
     .then((sent) => {
-      logger.log("Message sent: ", {
-        sent: {
-          id: sent.id,
-          content: sent.content,
-        },
-        message: { id: message.id, content: message.content },
-        post,
-      });
       cache.put(message.id, sent);
     })
     .catch((e) => {

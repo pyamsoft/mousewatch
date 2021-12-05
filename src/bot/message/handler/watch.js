@@ -17,6 +17,7 @@ function hasAvailability(maybeCalendar) {
     return false;
   }
 
+  logger.log("Does requested date have availability? : ", maybeCalendar.json);
   return maybeCalendar.available;
 }
 

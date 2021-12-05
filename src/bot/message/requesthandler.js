@@ -12,20 +12,6 @@ function extractCommand(content) {
 
 module.exports = {
   handle: function handle({ oldMessage, message, prefix }) {
-    logger.log("Handle message: ", {
-      oldMessage: oldMessage
-        ? {
-            id: oldMessage.id,
-            content: oldMessage.content,
-          }
-        : null,
-      message: {
-        id: message.id,
-        content: message.content,
-      },
-      prefix,
-    });
-
     // First parse the message and remove our prefix
     const { content } = message;
     const cleanContentWithCommand = content.substring(prefix.length).trim();

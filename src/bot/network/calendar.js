@@ -36,6 +36,7 @@ function getCacheFor(force, magicKey, numberMonths) {
 function createAvailability(json) {
   return {
     // Clear times
+    json,
     date: DateTime.fromISO(json.date).set({
       hour: 0,
       minute: 0,

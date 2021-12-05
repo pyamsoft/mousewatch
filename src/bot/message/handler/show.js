@@ -4,6 +4,9 @@ const TimeParser = require("../timeparser");
 const Formatter = require("../formatter");
 const { isSameDay } = require("./calendar");
 const { DateTime } = require("luxon");
+const Logger = require("../../../logger");
+
+const logger = Logger.tag("bot/message/handler/show");
 
 module.exports = {
   show: function show({ message, oldMessage, content }) {
@@ -42,6 +45,10 @@ module.exports = {
       );
 
       if (maybeMatching) {
+        logger.log(
+          "Does requested date have availability? : ",
+          maybeMatching.json
+        );
         return Responder.respond({
           oldMessage,
           message,

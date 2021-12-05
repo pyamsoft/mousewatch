@@ -10,37 +10,31 @@ function parseDate(content) {
       return date;
     }
 
-    logger.warn("Date not ISO format: ", content);
     date = DateTime.fromHTTP(content);
     if (date.isValid) {
       return date;
     }
 
-    logger.warn("Date not HTTP format: ", content);
     date = DateTime.fromRFC2822(content);
     if (date.isValid) {
       return date;
     }
 
-    logger.warn("Date not RFC format: ", content);
     date = DateTime.fromFormat(content, "MM/dd/yyyy");
     if (date.isValid) {
       return date;
     }
 
-    logger.warn("Date not MM/dd/yyyy format: ", content);
     date = DateTime.fromFormat(content, "MM-dd-yyyy");
     if (date.isValid) {
       return date;
     }
 
-    logger.warn("Date not MM-dd-yyyy format: ", content);
     date = DateTime.fromFormat(content, "MM dd yyyy");
     if (date.isValid) {
       return date;
     }
 
-    logger.warn("Date not MM dd yyyy format: ", content);
     return null;
   } catch (e) {
     logger.error(e, "Unable to parse date: ", content);

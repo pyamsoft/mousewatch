@@ -86,20 +86,12 @@ function spaceOutMessageLogs() {
 function botWatchMessageUpdates(emitter, prefix, { specificChannel }) {
   logger.log("Watching for message updates");
   emitter.on("messageUpdate", (oldMessage, newMessage) => {
-    const { id, content, channel, author } = newMessage;
+    const { channel } = newMessage;
     if (!validateMessage(prefix, newMessage, channel, specificChannel)) {
       return;
     }
 
     spaceOutMessageLogs();
-
-    // Handle the message
-    logger.log("Message updated: ", {
-      id,
-      content,
-      author,
-    });
-
     RequestHandler.handle({
       prefix,
       oldMessage,
@@ -111,7 +103,7 @@ function botWatchMessageUpdates(emitter, prefix, { specificChannel }) {
 function botWatchMessages(emitter, prefix, { specificChannel }) {
   logger.log("Watching for messages");
   emitter.on("message", (message) => {
-    const { id, content, channel, author } = message;
+    const { channel } = message;
 
     // This event will run on every single message received, from any channel or DM.
     if (!validateMessage(prefix, message, channel, specificChannel)) {
@@ -119,14 +111,6 @@ function botWatchMessages(emitter, prefix, { specificChannel }) {
     }
 
     spaceOutMessageLogs();
-
-    // Handle the message
-    logger.log("Message received: ", {
-      id,
-      content,
-      author,
-    });
-
     RequestHandler.handle({
       prefix,
       oldMessage: null,
