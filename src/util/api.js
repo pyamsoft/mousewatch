@@ -4,12 +4,16 @@ const axios = require("axios");
 const spoofUserAgent =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:93.0) Gecko/20100101 Firefox/93.0";
 
+const DISNEY_HEADERS = {
+  "User-Agent": spoofUserAgent,
+};
+
 module.exports = {
   disneyApi: function disneyApi(url) {
     return axios({
       method: "GET",
       url,
-      headers: { "User-Agent": spoofUserAgent },
-    }).then(r => r.data);
+      headers: DISNEY_HEADERS,
+    }).then((r) => r.data);
   },
 };

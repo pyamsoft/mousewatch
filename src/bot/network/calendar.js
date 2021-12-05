@@ -6,12 +6,15 @@ const { CACHE_INTERVAL } = require("../constants");
 
 const logger = Logger.tag("bot/network/calendar");
 
-const NUMBER_MONTHS = 3;
+/**
+ * For some reason, it only works like the website with 13.
+ */
+const NUMBER_MONTHS = 13;
 
 const availabilityCaches = {};
 
-function getCacheFor(force, magicKey, numberMonths) {
-  numberMonths = numberMonths || NUMBER_MONTHS;
+function getCacheFor(force, magicKey) {
+  const numberMonths = NUMBER_MONTHS;
 
   // If force, bypass cache
   if (force) {
@@ -71,19 +74,19 @@ function lookupCalendar(magicKey, numberMonths) {
 }
 
 module.exports = {
-  dreamKey: function dreamKey(force, numberMonths) {
-    return getCacheFor(force, "dream-key-pass", numberMonths);
+  dreamKey: function dreamKey(force) {
+    return getCacheFor(force, "dream-key-pass");
   },
 
-  believeKey: function dreamKey(force, numberMonths) {
-    return getCacheFor(force, "believe-key-pass", numberMonths);
+  believeKey: function believeKey(force) {
+    return getCacheFor(force, "believe-key-pass");
   },
 
-  enchantKey: function dreamKey(force, numberMonths) {
-    return getCacheFor(force, "enchant-key-pass", numberMonths);
+  enchantKey: function enchantKey(force) {
+    return getCacheFor(force, "enchant-key-pass");
   },
 
-  imagineKey: function dreamKey(force, numberMonths) {
-    return getCacheFor(force, "imagine-key-pass", numberMonths);
+  imagineKey: function imagineKey(force) {
+    return getCacheFor(force, "imagine-key-pass");
   },
 };

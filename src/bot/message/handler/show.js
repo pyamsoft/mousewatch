@@ -36,10 +36,7 @@ module.exports = {
       });
     }
 
-    const numberMonths = Math.ceil(
-      requestedDate.diff(today, "months").toObject().months
-    );
-    return Calendar.dreamKey(true, numberMonths).then((calendar) => {
+    return Calendar.dreamKey(true).then((calendar) => {
       const maybeMatching = calendar.find((c) =>
         isSameDay(c.date, requestedDate)
       );
