@@ -11,29 +11,38 @@ const logger = Logger.tag("bot/network/calendar");
  */
 const NUMBER_MONTHS = 13;
 
+/**
+ * String data returned when there is no availability
+ */
+const AVAILABILITY_BLOCKED = "cms-key-no-availability";
+
+/**
+ * Cached for long term
+ */
 const availabilityCaches = {};
 
-function getCacheFor(force, magicKey) {
-  const numberMonths = NUMBER_MONTHS;
+/**
+ * Cached for the duration of the request and then cleared
+ */
+const availabilityDebouncers = {};
 
-  // If force, bypass cache
-  if (force) {
-    return lookupCalendar(magicKey, numberMonths);
-  }
+function getCacheKey(force, magicKey) {
+  return `${force}|${magicKey}`;
+}
 
-  const key = `${magicKey}|${numberMonths}`;
-  let cache = availabilityCaches[key];
+function getCacheFor(caches, key) {
+  let cache = caches[key];
   if (!cache) {
     cache = CacheMan.create(
-      (magicKey, numberMonths) => lookupCalendar(magicKey, numberMonths),
+      (magicKey) => lookupCalendar(magicKey, NUMBER_MONTHS),
       {
         backend: MemoryStorageBackend.create(CACHE_INTERVAL),
       }
     );
-    availabilityCaches[key] = cache;
+    caches[key] = cache;
   }
 
-  return cache.get(magicKey, numberMonths);
+  return cache;
 }
 
 function createAvailability(json) {
@@ -46,8 +55,7 @@ function createAvailability(json) {
       second: 0,
       millisecond: 0,
     }),
-    available:
-      json.availability && json.availability !== "cms-key-no-availability",
+    available: json.availability && json.availability !== AVAILABILITY_BLOCKED,
   };
 }
 
@@ -73,20 +81,35 @@ function lookupCalendar(magicKey, numberMonths) {
     });
 }
 
+function getData(force, magicKey) {
+  const key = getCacheKey(force, magicKey);
+  const cache = getCacheFor(
+    force ? availabilityDebouncers : availabilityCaches,
+    key
+  );
+
+  return cache.get(magicKey).finally(() => {
+    if (force) {
+      logger.log("Upstream request debounced for:", key);
+      cache.clear();
+    }
+  });
+}
+
 module.exports = {
   dreamKey: function dreamKey(force) {
-    return getCacheFor(force, "dream-key-pass");
+    return getData(force, "dream-key-pass");
   },
 
   believeKey: function believeKey(force) {
-    return getCacheFor(force, "believe-key-pass");
+    return getData(force, "believe-key-pass");
   },
 
   enchantKey: function enchantKey(force) {
-    return getCacheFor(force, "enchant-key-pass");
+    return getData(force, "enchant-key-pass");
   },
 
   imagineKey: function imagineKey(force) {
-    return getCacheFor(force, "imagine-key-pass");
+    return getData(force, "imagine-key-pass");
   },
 };
