@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd "${HOME}/dev/Pyamsoft/stonk-bot" || {
+cd "${HOME}/dev/Pyamsoft/mousewatch" || {
   printf -- 'Failed to cd into bot directory\n'
   exit 1
 }
