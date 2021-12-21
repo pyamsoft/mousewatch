@@ -5,10 +5,10 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "yarn lint && node --trace-warnings ./src/index.js",
-    "deploy:main": "yarn lint && bash ./bin/deploy 1",
-    "deploy:back": "yarn lint && bash ./bin/deploy 2",
-    "scale:main": "bash ./bin/scale mouse1",
-    "scale:back": "bash ./bin/scale mouse2",
+    "deploy:mouse1": "yarn lint && bash ./bin/deploy 1",
+    "deploy:mouse2": "yarn lint && bash ./bin/deploy 2",
+    "scale:mouse1": "bash ./bin/scale mouse1",
+    "scale:mouse2": "bash ./bin/scale mouse2",
     "lint": "eslint ."
   },
   "engines": {
