@@ -1,6 +1,8 @@
-const Discord = require("discord.js");
-const Client = new Discord.Client();
+const { Client, Intents } = require("discord.js");
+const client = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES],
+});
 
 module.exports = {
-  Client,
+  Client: client,
 };
