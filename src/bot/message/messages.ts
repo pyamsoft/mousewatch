@@ -22,7 +22,6 @@ import { MouseCommand } from "../../commands/MouseCommand";
 
 const logger = newLogger("messages");
 
-// @ts-ignore
 const sendMessageAfterParsing = function (
   results: MessageHandlerOutput[],
   message: Msg,
@@ -83,11 +82,9 @@ const toCommand = function (config: BotConfig, content: string): MouseCommand {
 
 export const handleBotMessage = function (
   config: BotConfig,
-  // @ts-ignore
   eventType: MessageEventType,
   message: Message | PartialMessage,
   optionalOldMessage: Message | PartialMessage | undefined,
-  // @ts-ignore
   env: {
     handlers: KeyedMessageHandler[];
     cache: MessageCache;
