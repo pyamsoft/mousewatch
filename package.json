@@ -1,30 +1,55 @@
 {
   "name": "mousewatch",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "main": "index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "start": "yarn lint && node --trace-warnings ./src/index.js",
-    "deploy:mouse1": "yarn lint && bash ./bin/deploy 1",
-    "deploy:mouse2": "yarn lint && bash ./bin/deploy 2",
-    "scale:mouse1": "bash ./bin/scale mouse1",
-    "scale:mouse2": "bash ./bin/scale mouse2",
-    "lint": "eslint ."
+    "build": "yarn lint && tsc",
+    "start": "yarn build && node ./dist/index.js",
+    "deploy:main": "yarn build && bash ./bin/deploy 1",
+    "deploy:back": "yarn build && bash ./bin/deploy 2",
+    "scale:main": "bash ./bin/scale mouse1",
+    "scale:back": "bash ./bin/scale mouse2",
+    "lint": "rm -rf dist && eslint ."
   },
   "engines": {
-    "node": ">=12.x"
+    "node": "16.x"
   },
   "dependencies": {
-    "@runmeetly/cache-man": "0.2.1",
+    "@babel/core": "7",
+    "@babel/plugin-proposal-private-property-in-object": "7.17.12",
+    "@babel/plugin-syntax-flow": "7",
+    "@babel/plugin-transform-react-jsx": "7",
+    "@babel/preset-env": "7.16.11",
+    "@babel/preset-typescript": "7.16.7",
+    "@discordjs/rest": "0.5.0",
+    "@discordjs/voice": "0.10.0",
+    "@types/jest": "27.4.1",
+    "@types/uuid": "8.3.4",
+    "@typescript-eslint/eslint-plugin": "5.30.5",
+    "@typescript-eslint/parser": "5.30.5",
     "axios": "0.26.1",
+    "babel-eslint": "10",
+    "babel-loader": "8.2.5",
+    "bufferutil": "4.0.6",
     "discord.js": "13.6.0",
-    "dotenv": "16.0.0",
-    "eslint": "8.12.0",
-    "luxon": "2.3.1",
-    "node-fetch": "3.2.3",
-    "pg": "8.7.3"
+    "dotenv": "16.0.1",
+    "erlpack": "discord/erlpack",
+    "eslint": "7",
+    "eslint-config-react-app": "6",
+    "eslint-plugin-flowtype": "5",
+    "eslint-plugin-import": "2",
+    "eslint-plugin-jsx-a11y": "6",
+    "eslint-plugin-react": "7",
+    "eslint-plugin-react-hooks": "4",
+    "jest": "27.5.1",
+    "prettier": "2.6.2",
+    "tslib": "2.4.0",
+    "typescript": "4.6.4",
+    "utf-8-validate": "5.0.9",
+    "uuid": "8.3.2",
+    "zlib-sync": "0.1.7"
   },
   "devDependencies": {
-    "prettier": "2.6.2"
   }
 }
