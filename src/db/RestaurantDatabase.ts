@@ -19,11 +19,17 @@ export const ensureDefaultDatabase = function (config: BotConfig): Database {
 const TABLE_NAME = "restaurant_data";
 
 export interface RestaurantData extends BaseDataModel {
+  restaurantUrl: string;
   restaurantName: string;
+  lastCheckTime: Date;
+  lastNotifyTime: Date;
 }
 
 export const RestaurantDataRows = {
+  RESTAURANT_URL: "restaurant_url",
   RESTAURANT_NAME: "restaurant_name",
+  LAST_CHECK_TIME: "last_check_time",
+  LAST_NOTIFY_TIME: "last_notify_time",
 };
 
 export const RestaurantDatabase = {
@@ -37,15 +43,19 @@ export const RestaurantDatabase = {
   ): Promise<DatabaseResult<RestaurantData[]>> {
     const db = ensureDefaultDatabase(config);
     return await db.query(`SELECT * FROM ${TABLE_NAME}`, [], (r: any) => {
-      return {
+      const d: RestaurantData = {
         id: r[BaseDataModelRows.ID],
         createdAt: new Date(r[BaseDataModelRows.CREATED_AT]),
         messageId: r[BaseDataModelRows.MESSAGE_ID],
         channelId: r[BaseDataModelRows.CHANNEL_ID],
         userName: r[BaseDataModelRows.USER_NAME],
         userId: r[BaseDataModelRows.USER_ID],
+        restaurantUrl: r[RestaurantDataRows.RESTAURANT_URL],
         restaurantName: r[RestaurantDataRows.RESTAURANT_NAME],
+        lastCheckTime: new Date(r[RestaurantDataRows.LAST_CHECK_TIME]),
+        lastNotifyTime: new Date(r[RestaurantDataRows.LAST_NOTIFY_TIME]),
       };
+      return d;
     });
   },
 };
