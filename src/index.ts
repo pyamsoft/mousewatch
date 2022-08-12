@@ -3,7 +3,7 @@ import { sourceConfig } from "./config";
 import { newLogger } from "./bot/logger";
 import { MessageEventTypes } from "./bot/model/MessageEventType";
 import { HelpHandler } from "./commands/help";
-import { RestaurantDatabase } from "./db/MouseDatabase";
+import { RestaurantDatabase } from "./db/RestaurantDatabase";
 
 const logger = newLogger("MouseWatch");
 
