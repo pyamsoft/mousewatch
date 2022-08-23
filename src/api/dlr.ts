@@ -1,8 +1,9 @@
-import { jsonApi } from "../../util/api";
+import { jsonApi } from "../util/api";
 import { URLSearchParams } from "url";
-import { MealPeriods } from "../MealPeriods";
-import { DlrRestaurantSlot } from "./DlrRestaurantSlot";
-import { newLogger } from "../../bot/logger";
+import { MealPeriods } from "../model/MealPeriods";
+import { DlrRestaurantSlot } from "../model/DlrRestaurantSlot";
+import { newLogger } from "../bot/logger";
+import { DlrRestaurant } from "../model/DlrRestaurants";
 
 const logger = newLogger("api/dlr");
 
@@ -11,12 +12,13 @@ const USER_SESSION_IDS = [
   "BC0EB0021-0D9D-43E5-B5D8-E74E2A4F8B43",
 ];
 
+const DINING_URL = "https://disneyland.disney.go.com/dining";
 const DINING_ENDPOINT =
   "https://disneyland.disney.go.com/finder/api/v1/explorer-service/dining-availability";
 
 export interface DlrApi {
   getAvailableSlots(data: {
-    restaurantId: string;
+    restaurant: DlrRestaurant;
     mealPeriod: MealPeriods;
     partySize: number;
     date: Date;
@@ -49,20 +51,22 @@ const resolveMealPeriodId = function (mealPeriod: MealPeriods): string {
 
 export const DefaultDlrApi: DlrApi = {
   async getAvailableSlots(data: {
-    restaurantId: string;
+    restaurant: DlrRestaurant;
     mealPeriod: MealPeriods;
     partySize: number;
     date: Date;
   }): Promise<DlrRestaurantSlot[]> {
     const userSessionId = `{${resolveUserSessionId()}}`;
-    const { restaurantId, mealPeriod, partySize, date } = data;
+    const { restaurant, mealPeriod, partySize, date } = data;
 
     const params = new URLSearchParams();
     params.set("mealPeriod", resolveMealPeriodId(mealPeriod));
 
     try {
       const result: any = await jsonApi(
-        `${DINING_ENDPOINT}/${userSessionId}/dlr/${restaurantId};entityType=restaurant/table-service/${partySize}/${resolveDateString(
+        `${DINING_ENDPOINT}/${userSessionId}/dlr/${
+          restaurant.id
+        };entityType=restaurant/table-service/${partySize}/${resolveDateString(
           date
         )}/?${params.toString()}`
       );
@@ -75,7 +79,8 @@ export const DefaultDlrApi: DlrApi = {
         const slots = [];
         for (const offer of result.offers) {
           slots.push({
-            url: offer.url,
+            restaurant,
+            url: `${DINING_URL}/${offer.url}`,
             time: offer.time,
             dateTime: new Date(offer.dateTime),
             mealPeriod,
@@ -86,7 +91,7 @@ export const DefaultDlrApi: DlrApi = {
         return slots;
       } else {
         logger.warn("No DLR dining slots available: ", {
-          restaurantId,
+          restaurant,
           mealPeriod,
           partySize,
           date,
@@ -96,7 +101,7 @@ export const DefaultDlrApi: DlrApi = {
     } catch (e: any) {
       logger.error("Failed to find DLR dining slots: ", {
         error: e,
-        restaurantId,
+        restaurant,
         mealPeriod,
         partySize,
         date,

@@ -1,7 +1,8 @@
 import { RestaurantData } from "../db/RestaurantDatabase";
-import { DiningSlot } from "./DiningSlot";
+import { DiningSlot } from "../model/DiningSlot";
 import { newLogger } from "../bot/logger";
-import { DefaultDlrApi, DlrApi } from "./disney/dlr";
+import { DefaultDlrApi, DlrApi } from "./dlr";
+import { convertRestaurantRowToDlrRestaurant } from "../model/DlrRestaurants";
 
 const logger = newLogger("api/restaurant");
 
@@ -27,9 +28,18 @@ export const getReservationAvailabilityForRestaurant = async function (
     api?: DlrApi;
   }
 ): Promise<DiningSlot[]> {
+  const dlrRestaurant = convertRestaurantRowToDlrRestaurant(restaurant);
+  if (!dlrRestaurant) {
+    logger.warn(
+      "Unable to convert RestaurantData to DLR restaurant",
+      restaurant
+    );
+    return [];
+  }
+
   try {
     const dlrResult = await resolveDlrApi(env).getAvailableSlots({
-      restaurantId: restaurant.restaurantId,
+      restaurant: dlrRestaurant,
       mealPeriod: restaurant.mealPeriod,
       partySize: restaurant.partySize,
       date: restaurant.mealDate,

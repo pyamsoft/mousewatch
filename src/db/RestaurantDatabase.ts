@@ -2,7 +2,7 @@ import { BotConfig } from "../config";
 import { createNewDatabase, Database, DatabaseResult } from "./Database";
 import { newLogger } from "../bot/logger";
 import { BaseDataModel, BaseDataModelRows } from "./BaseDataModel";
-import { MealPeriods } from "../api/MealPeriods";
+import { MealPeriods } from "../model/MealPeriods";
 
 const logger = newLogger("RestaurantDatabase");
 
