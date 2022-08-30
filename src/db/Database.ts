@@ -23,6 +23,7 @@ export interface Database {
 
 export const createNewDatabase = function (config: BotConfig): Database {
   const p = ensurePoolConnection(config);
+
   return {
     query: async function <T>(
       sql: string,
@@ -31,7 +32,7 @@ export const createNewDatabase = function (config: BotConfig): Database {
     ): Promise<DatabaseResult<T[]>> {
       try {
         const result = await p.query(sql, variables);
-        const data = result.rows.map((r) => mapper(r));
+        const data = (result.rows || []).map((r) => mapper(r));
         return {
           data,
           error: undefined,

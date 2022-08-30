@@ -45,10 +45,42 @@ export const RestaurantDataRows = {
   LAST_NOTIFY_TIME: "last_notify_time",
 };
 
+const ensureRestaurantDbExists = async function (db: Database) {
+  try {
+    await db.query(
+      `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
+      ${BaseDataModelRows.ID} UUID PRIMARY KEY,
+      ${BaseDataModelRows.CREATED_AT} BIGINT NOT NULL,
+      ${BaseDataModelRows.USER_ID} TEXT NOT NULL
+      ${BaseDataModelRows.CHANNEL_ID} TEXT NOT NULL,
+      ${BaseDataModelRows.MESSAGE_ID} TEXT NOT NULL,
+      ${BaseDataModelRows.USER_NAME} TEXT NOT NULL,
+
+      ${RestaurantDataRows.RESTAURANT_ID} TEXT NOT NULL,
+      ${RestaurantDataRows.RESTAURANT_URL} TEXT NOT NULL,
+      ${RestaurantDataRows.RESTAURANT_NAME} TEXT NOT NULL,
+
+      ${RestaurantDataRows.MEAL_DATE} BIGINT NOT NULL,
+      ${RestaurantDataRows.MEAL_PERIOD} TEXT NOT NULL,
+      ${RestaurantDataRows.PARTY_SIZE} INT NOT NULL,
+
+      ${RestaurantDataRows.LAST_CHECK_TIME} INT NOT NULL,
+      ${RestaurantDataRows.LAST_NOTIFY_TIME} INT NOT NULL,
+  );`,
+      [],
+      (r: any) => r
+    );
+  } catch (e: any) {
+    logger.error(e, "Failed to create table", TABLE_NAME);
+  }
+};
+
 export const RestaurantDatabase = {
-  restore: async function (config: BotConfig) {
+  init: async function (config: BotConfig) {
     const db = ensureDefaultDatabase(config);
-    logger.log("Restore restaurant database: ", db);
+
+    logger.log("Ensure restaurant database: ", db);
+    await ensureRestaurantDbExists(db);
   },
 
   getAllRestaurants: async function (
