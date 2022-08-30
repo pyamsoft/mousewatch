@@ -12,7 +12,7 @@ class RestaurantLooperImpl extends BaseLooper<RestaurantData, DiningSlot[]> {
 
   // Open constructor
   public constructor() {
-    super();
+    super("RestaurantData");
   }
 
   upstream = async (data: RestaurantData) => {

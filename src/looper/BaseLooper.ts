@@ -2,6 +2,7 @@ import { Looper } from "./Looper";
 import { clearInterval, setInterval, setTimeout } from "timers";
 import { LooperUnregister } from "./LooperUnregister";
 import { generateRandomId } from "../bot/model/id";
+import { Logger, newLogger } from "../bot/logger";
 
 const delay = function (amount: number): Promise<void> {
   return new Promise<void>((resolve) => {
@@ -10,6 +11,7 @@ const delay = function (amount: number): Promise<void> {
 };
 
 export abstract class BaseLooper<T, R> implements Looper<T, R> {
+  private readonly logger: Logger;
   private interval: any;
   private registrations: {
     key: string;
@@ -17,7 +19,8 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
     callback: (data: R) => boolean;
   }[];
 
-  protected constructor() {
+  protected constructor(tag: string) {
+    this.logger = newLogger(`BaseLooper[${tag}]`);
     this.interval = undefined;
     this.registrations = [];
   }
@@ -37,6 +40,10 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
         .then(callback)
         .then((remove) => {
           if (remove) {
+            self.logger.log("Looper is marked completed:", {
+              key,
+              data: submission,
+            });
             self.removeSubmission(key);
           }
         });
@@ -54,17 +61,27 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
     const self = this;
     const index = self.registrations.findIndex((r) => r.key === key);
     if (index >= 0) {
-      self.registrations.splice(index, 1);
+      const deleted = self.registrations.splice(index, 1);
+      self.logger.log("Remove looper for submission: ", {
+        key,
+        deleted,
+      });
+    }
+
+    if (self.registrations.length <= 0) {
+      self.shutdown();
     }
   }
 
   private onRegistrationsUpdated() {
     const self = this;
     if (self.interval) {
+      self.logger.log("Already looping, do not need to re-register");
       return;
     }
 
     if (self.registrations.length > 0) {
+      self.logger.log("Begin looping with registrations");
       self.interval = setInterval(
         () => self.onTimerCallback(),
         self.loopPeriod * 60 * 1000
@@ -89,6 +106,10 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
 
     const result: LooperUnregister = {
       unregister: () => {
+        self.logger.log("Request stop looping: ", {
+          key,
+          data,
+        });
         self.removeSubmission(key);
       },
     };
@@ -96,13 +117,15 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
   };
 
   shutdown: () => void = () => {
-    if (!this.interval) {
+    const self = this;
+    if (!self.interval) {
       return;
     }
 
-    clearInterval(this.interval);
-    this.interval = undefined;
-    this.registrations = [];
+    self.logger.log("Shutdown looper");
+    clearInterval(self.interval);
+    self.interval = undefined;
+    self.registrations = [];
   };
 
   protected abstract loopPeriod: number;
