@@ -1,6 +1,7 @@
 import { Looper } from "./Looper";
 import { clearInterval, setInterval, setTimeout } from "timers";
 import { LooperUnregister } from "./LooperUnregister";
+import { generateRandomId } from "../bot/model/id";
 
 const delay = function (amount: number): Promise<void> {
   return new Promise<void>((resolve) => {
@@ -11,8 +12,9 @@ const delay = function (amount: number): Promise<void> {
 export abstract class BaseLooper<T, R> implements Looper<T, R> {
   private interval: any;
   private registrations: {
+    key: string;
     submission: T;
-    callback: (data: R) => void;
+    callback: (data: R) => boolean;
   }[];
 
   protected constructor() {
@@ -27,10 +29,17 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
     const jobs = [];
 
     for (const stored of list) {
-      const { submission, callback } = stored;
+      const { key, submission, callback } = stored;
 
       // Run each submission in parallel
-      const job = self.upstream(submission).then(callback);
+      const job = self
+        .upstream(submission)
+        .then(callback)
+        .then((remove) => {
+          if (remove) {
+            self.removeSubmission(key);
+          }
+        });
 
       // Add processing delay to avoid overloading third-party endpoint
       await delay(500);
@@ -39,6 +48,14 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
     }
 
     await Promise.all(jobs);
+  }
+
+  private removeSubmission(key: string) {
+    const self = this;
+    const index = self.registrations.findIndex((r) => r.key === key);
+    if (index >= 0) {
+      self.registrations.splice(index, 1);
+    }
   }
 
   private onRegistrationsUpdated() {
@@ -55,10 +72,14 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
     }
   }
 
-  submit = (data: T, onProcess: (data: R) => void) => {
+  submit = (data: T, onProcess: (data: R) => boolean) => {
     const self = this;
 
+    // For later lookup or deletion
+    const key = generateRandomId();
+
     const item = {
+      key,
       submission: data,
       callback: onProcess,
     };
@@ -68,10 +89,7 @@ export abstract class BaseLooper<T, R> implements Looper<T, R> {
 
     const result: LooperUnregister = {
       unregister: () => {
-        const index = self.registrations.indexOf(item);
-        if (index >= 0) {
-          self.registrations.splice(index, 1);
-        }
+        self.removeSubmission(key);
       },
     };
     return result;

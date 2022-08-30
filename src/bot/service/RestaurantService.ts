@@ -12,6 +12,9 @@ const watchAndNotifyRestaurantSlots = async function (
       restaurant,
       slots,
     });
+
+    // Remove true to signal that we have looped and "finished", and should not loop this again
+    return false;
   });
 };
 
