@@ -4,9 +4,8 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "docker": "sudo docker build . -t pyamsoft/mousewatch -f ./Dockerfile",
     "build": "yarn lint && tsc",
-    "start": "yarn lint && node ./src/index.js",
+    "start": "yarn build && node ./dist/index.js",
     "lint": "rm -rf dist && eslint ."
   },
   "engines": {
@@ -21,8 +20,8 @@
     "@babel/preset-typescript": "7.16.7",
     "@discordjs/rest": "0.5.0",
     "@discordjs/voice": "0.10.0",
-    "@runmeetly/cache-man": "0.2.1",
     "@types/jest": "27.4.1",
+    "@types/luxon": "3.1.0",
     "@types/uuid": "8.3.4",
     "@typescript-eslint/eslint-plugin": "5.30.5",
     "@typescript-eslint/parser": "5.30.5",
@@ -41,7 +40,7 @@
     "eslint-plugin-react": "7",
     "eslint-plugin-react-hooks": "4",
     "jest": "27.5.1",
-    "luxon": "2.3.1",
+    "luxon": "3.1.1",
     "prettier": "2.6.2",
     "tslib": "2.4.0",
     "typescript": "4.6.4",
@@ -49,6 +48,5 @@
     "uuid": "8.3.2",
     "zlib-sync": "0.1.7"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
