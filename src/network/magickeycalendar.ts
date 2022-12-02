@@ -1,3 +1,4 @@
+import { MagicKeyType } from "../commands/model/MagicKeyType";
 import { newLogger } from "../bot/logger";
 import { ParkCalendarResponse } from "../commands/model/ParkCalendarResponse";
 import { DateTime } from "luxon";
@@ -79,14 +80,6 @@ const getData = function (
 ): Promise<ParkCalendarResponse[]> {
   return lookupCalendar(magicKey, NUMBER_MONTHS);
 };
-
-enum MagicKeyType {
-  DREAM = "dream-key-pass",
-  BELIEVE = "believe-key-pass",
-  ENCHANT = "enchant-key-pass",
-  IMAGINE = "imagine-key-pass",
-  INSPIRE = "inspire-key-pass",
-}
 
 export const MagicKeyCalendarApi = {
   inspireKey: function dreamKey() {

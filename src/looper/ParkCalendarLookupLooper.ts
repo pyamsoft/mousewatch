@@ -1,4 +1,5 @@
 import { newLogger } from "../bot/logger";
+import { ParkWatchCache } from "./ParkWatchCache";
 
 const logger = newLogger("ParkCalendarLookupLooper");
 
@@ -34,7 +35,7 @@ export const ParkCalendarLookupLooper = {
 
     logger.log("Begin loop!");
     beginLooping(() => {
-        
+        const magicKeys = ParkWatchCache.targetCalendars();
     });
   },
 
