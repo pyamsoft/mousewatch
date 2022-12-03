@@ -75,18 +75,8 @@ function lookupCalendar(
     });
 }
 
-const getData = function (
-  magicKey: MagicKeyType
-): Promise<ParkCalendarResponse[]> {
-  return lookupCalendar(magicKey, NUMBER_MONTHS);
-};
-
 export const MagicKeyCalendarApi = {
-  inspireKey: function dreamKey() {
-    return getData(MagicKeyType.INSPIRE);
-  },
-
-  dreamKey: function dreamKey() {
-    return getData(MagicKeyType.DREAM);
+  getCalendar: function (magicKey: MagicKeyType) {
+    return lookupCalendar(magicKey, NUMBER_MONTHS);
   },
 };
