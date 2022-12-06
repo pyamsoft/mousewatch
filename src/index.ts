@@ -6,7 +6,7 @@ import { ShowHandler } from "./commands/show";
 import { StatusHandler } from "./commands/status";
 import { sourceConfig } from "./config";
 
-const logger = newLogger("StonkBot");
+const logger = newLogger("MouseWatch");
 
 const config = sourceConfig();
 const bot = initializeBot(config);

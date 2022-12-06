@@ -3,7 +3,6 @@ import { codeBlock } from "../../bot/discord/format";
 import { KeyedObject } from "../../bot/model/KeyedObject";
 import { BotConfig } from "../../config";
 import { ParkWatchCache } from "../../looper/ParkWatchCache";
-import { PackageJson } from "../../packageJson";
 import { allMagicKeys, magicKeyName } from "../model/MagicKeyType";
 
 interface MagicKeyPayload {
@@ -50,19 +49,18 @@ export const outputStatusText = function (config: BotConfig): Promise<string> {
         textBlock += `${keyName}\n`;
         for (const block of userBlocks) {
           textBlock += `    ${block.userName}: ${block.dates
-            .map((d) => d.toLocaleString(DateTime.DATE_SHORT))
+            .map((d) => d.toLocaleString(DateTime.DATE_MED))
             .join(", ")}`;
         }
-        textBlock += `\n\n`
+        textBlock += `\n\n`;
       }
     }
 
     resolve(
       codeBlock(`
-  ${PackageJson.name} VERSION ${PackageJson.version}
-  COMMAND: ${prefix}
-  ===========================
-  ${textBlock.trim()}
+COMMAND: ${prefix}
+===========================
+${textBlock.trim()}
 `)
     );
   });

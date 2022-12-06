@@ -1,7 +1,7 @@
-import { MagicKeyType } from "../commands/model/MagicKeyType";
 import { newLogger } from "../bot/logger";
+import { MagicKeyType } from "../commands/model/MagicKeyType";
 import { ParkCalendarResponse } from "../commands/model/ParkCalendarResponse";
-import { DateTime } from "luxon";
+import { parseDate } from "../looper/DateParser";
 import { jsonApi } from "../util/api";
 
 const logger = newLogger("MagicKeyCalendarApi");
@@ -24,16 +24,16 @@ const NUMBER_MONTHS = 13;
  */
 const AVAILABILITY_BLOCKED = "cms-key-no-availability";
 
-function createAvailability(json: any): ParkCalendarResponse {
+function createAvailability(json: any): ParkCalendarResponse | undefined {
+  const date = parseDate(json.date);
+  if (!date) {
+    return undefined;
+  }
+
   return {
     objectType: "ParkCalendarResponse",
     json,
-    date: DateTime.fromISO(json.date).set({
-      hour: 0,
-      minute: 0,
-      second: 0,
-      millisecond: 0,
-    }),
+    date,
     available:
       !!json.availability && json.availability !== AVAILABILITY_BLOCKED,
   };
@@ -50,7 +50,9 @@ function createAvailabilityList(json: any): ParkCalendarResponse[] {
   if (!list || list.length <= 0) {
     return [];
   }
-  return list.map(createAvailability);
+  return list
+    .map(createAvailability)
+    .filter((a: ParkCalendarResponse | undefined) => !!a);
 }
 
 function lookupCalendar(

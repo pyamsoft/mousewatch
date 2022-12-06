@@ -54,7 +54,8 @@ export const ParkCalendarLookupLooper = {
             for (const res of lookup) {
               const entry = entries.find(
                 (e) =>
-                  e.targetDate === res.targetDate && e.magicKey === res.magicKey
+                  e.targetDate.valueOf() === res.targetDate.valueOf() &&
+                  e.magicKey === res.magicKey
               );
               if (entry) {
                 results.push(createResultFromEntry(entry, res.parkResponse));

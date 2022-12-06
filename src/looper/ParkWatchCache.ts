@@ -1,6 +1,6 @@
-import { WatchEntry } from "../commands/model/WatchEntry";
 import { DateTime } from "luxon";
 import { MagicKeyType } from "../commands/model/MagicKeyType";
+import { WatchEntry } from "../commands/model/WatchEntry";
 
 const cache = new Set<WatchEntry>();
 
@@ -12,7 +12,7 @@ const removeWatches = function (
 
   cache.forEach((e) => {
     if (e.userId === userId) {
-      if (!optionalDate || optionalDate === e.targetDate) {
+      if (!optionalDate || optionalDate.valueOf() === e.targetDate.valueOf()) {
         deleteMe.push(e);
       }
     }
@@ -58,7 +58,7 @@ export const ParkWatchCache = {
       if (
         e.userId === entry.userId &&
         e.magicKey === entry.magicKey &&
-        e.targetDate === entry.targetDate
+        e.targetDate.valueOf() === entry.targetDate.valueOf()
       ) {
         dupe = true;
       }

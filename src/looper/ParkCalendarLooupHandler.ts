@@ -20,7 +20,7 @@ export const ParkCalendarLookupHandler = {
         .then((response) => {
           for (const res of response) {
             for (const date of dates) {
-              if (date == res.date) {
+              if (date.valueOf() === res.date.valueOf()) {
                 result.push(createLookupResult(magicKey, date, res));
               }
             }

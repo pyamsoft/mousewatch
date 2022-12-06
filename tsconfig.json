@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
+    "rootDir": "src",
     "isolatedModules": true
   }
 }
