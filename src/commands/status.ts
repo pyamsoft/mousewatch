@@ -1,8 +1,8 @@
+import { newLogger } from "../bot/logger";
 import {
   MessageHandler,
-  messageHandlerOutput,
+  messageHandlerHelpText,
 } from "../bot/message/MessageHandler";
-import { newLogger } from "../bot/logger";
 import { BotConfig } from "../config";
 import { ParkCommand, ParkCommandType } from "./command";
 import { outputStatusText } from "./outputs/status";
@@ -30,6 +30,8 @@ export const StatusHandler: MessageHandler = {
     }
 
     logger.log("Handle status message", currentCommand);
-    return Promise.resolve(messageHandlerOutput(outputStatusText(config)));
+    return outputStatusText(config).then((text) =>
+      messageHandlerHelpText(text)
+    );
   },
 };
