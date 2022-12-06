@@ -39,6 +39,18 @@ export const ParkWatchCache = {
     return magicKeys;
   },
 
+  magicKeyWatches: function (magicKey: MagicKeyType): WatchEntry[] {
+    const entries: WatchEntry[] = [];
+
+    cache.forEach((entry) => {
+      if (entry.magicKey === magicKey) {
+        entries.push(entry);
+      }
+    });
+
+    return entries;
+  },
+
   addWatch: function (entry: WatchEntry) {
     let dupe = false;
 

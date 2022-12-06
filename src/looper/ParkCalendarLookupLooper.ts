@@ -1,4 +1,6 @@
 import { newLogger } from "../bot/logger";
+import { WatchResult } from "../commands/model/WatchResult";
+import { ParkCalendarLookupHandler } from "./ParkCalendarLooupHandler";
 import { ParkWatchCache } from "./ParkWatchCache";
 
 const logger = newLogger("ParkCalendarLookupLooper");
@@ -27,7 +29,7 @@ const stopLooping = function () {
 };
 
 export const ParkCalendarLookupLooper = {
-  loop: function () {
+  loop: function (onResultsReceived: (results: WatchResult[]) => void) {
     if (looping) {
       logger.log("loop() called but already looping");
       return;
@@ -35,7 +37,20 @@ export const ParkCalendarLookupLooper = {
 
     logger.log("Begin loop!");
     beginLooping(() => {
-        const magicKeys = ParkWatchCache.targetCalendars();
+      logger.log("Loop run: Get all keys and fetch calendar info");
+      const magicKeys = ParkWatchCache.targetCalendars();
+      const jobs: Promise<WatchResult[]>[] = [];
+
+      for (const magicKey of magicKeys) {
+        const entries = ParkWatchCache.magicKeyWatches(magicKey);
+        jobs.push(ParkCalendarLookupHandler.lookup(magicKey, entries));
+      }
+
+      Promise.all(jobs).then((results) => {
+        for (const watchResults of results) {
+          onResultsReceived(watchResults);
+        }
+      });
     });
   },
 
