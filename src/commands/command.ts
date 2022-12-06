@@ -1,4 +1,5 @@
 import { BotConfig } from "../config";
+import { MagicKeyType } from "./model/MagicKeyType";
 
 export enum ParkCommandType {
   SHOW = "SHOW",
@@ -7,12 +8,14 @@ export enum ParkCommandType {
   CANCEL = "CANCEL",
   STATUS = "STATUS",
   HELP = "HELP",
-  NONE = "NONE",
+  NONE = "",
 }
 
 export interface ParkCommand {
   isHelpCommand: boolean;
   type: ParkCommandType;
+
+  magicKey: MagicKeyType;
   dates: string[];
 }
 
@@ -27,6 +30,7 @@ const stringContentToArray = function (
     return {
       isHelpCommand: true,
       type: ParkCommandType.NONE,
+      magicKey: MagicKeyType.NONE,
       dates: [],
     };
   }
@@ -48,6 +52,7 @@ const stringContentToArray = function (
     return {
       isHelpCommand: true,
       type: ParkCommandType.NONE,
+      magicKey: MagicKeyType.NONE,
       dates: [],
     };
   }
@@ -73,6 +78,9 @@ const stringContentToArray = function (
       type === ParkCommandType.HELP || type === ParkCommandType.NONE,
     type,
     dates: args,
+
+    // Magic key is hardcoded - change to take optional Key
+    magicKey: MagicKeyType.INSPIRE,
   };
 };
 
@@ -80,13 +88,13 @@ export const stringContentToParkCommand = function (
   config: BotConfig,
   content: string
 ): ParkCommand {
-  const { isHelpCommand, type, dates } = stringContentToArray(
+  const { isHelpCommand, type, dates, magicKey } = stringContentToArray(
     config,
     0,
     content
   );
 
-  let needsDatesButHasNone = true;
+  let needsDatesButHasNone: boolean;
   if (type === ParkCommandType.CANCEL || type === ParkCommandType.STATUS) {
     needsDatesButHasNone = false;
   } else {
@@ -100,6 +108,7 @@ export const stringContentToParkCommand = function (
       type === ParkCommandType.HELP ||
       needsDatesButHasNone,
     type,
+    magicKey,
     dates,
   };
 };

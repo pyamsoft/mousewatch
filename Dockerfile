@@ -8,7 +8,7 @@ COPY package.json ./
 COPY tsconfig.json ./
 COPY yarn.lock ./
 COPY .eslintrc.js ./
-COPY .env ./
+COPY .env.prod ./.env
 COPY src ./src
 
 RUN chmod 644 .env && yarn && yarn lint

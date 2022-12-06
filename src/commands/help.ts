@@ -1,6 +1,6 @@
 import {
   MessageHandler,
-  messageHandlerHelpText,
+  messageHandlerHelpText, MessageHandlerOutput,
 } from "../bot/message/MessageHandler";
 import { newLogger } from "../bot/logger";
 import { BotConfig } from "../config";
@@ -18,6 +18,7 @@ export const HelpHandler: MessageHandler = {
     command: {
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
+      postExtraMessage: (output: MessageHandlerOutput) => void;
     }
   ) {
     // Only handle help

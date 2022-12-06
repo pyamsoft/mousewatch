@@ -4,6 +4,7 @@ export enum MagicKeyType {
   ENCHANT = "enchant-key-pass",
   IMAGINE = "imagine-key-pass",
   INSPIRE = "inspire-key-pass",
+  NONE = "",
 }
 
 export const allMagicKeys = function (): MagicKeyType[] {

@@ -1,8 +1,16 @@
-import { BotConfig } from "../../config";
 import { Message, PartialMessage } from "discord.js";
-import { KeyedMessageHandler, MessageHandlerOutput } from "./MessageHandler";
+import { stringContentToParkCommand } from "../../commands/command";
+import { BotConfig } from "../../config";
 import { newLogger } from "../logger";
+import { KeyedObject } from "../model/KeyedObject";
+import { MessageEventType } from "../model/MessageEventType";
+import {
+  createCommunicationMessage,
+  createCommunicationResult,
+  sendMessage,
+} from "./communicate";
 import { MessageCache } from "./MessageCache";
+import { KeyedMessageHandler, MessageHandlerOutput } from "./MessageHandler";
 import {
   logMsg,
   Msg,
@@ -10,15 +18,7 @@ import {
   SendChannel,
   sendChannelFromMessage,
 } from "./Msg";
-import { MessageEventType } from "../model/MessageEventType";
 import { validateMessage } from "./validate";
-import {
-  createCommunicationMessage,
-  createCommunicationResult,
-  sendMessage,
-} from "./communicate";
-import { KeyedObject } from "../model/KeyedObject";
-import { stringContentToParkCommand } from "../../commands/command";
 
 const logger = newLogger("messages");
 
@@ -97,7 +97,11 @@ export const handleBotMessage = function (
     ? stringContentToParkCommand(config, oldMsg.content)
     : undefined;
 
-  const work = [];
+  const postMessage = function (outputs: MessageHandlerOutput[]) {
+    sendMessageAfterParsing(outputs, msg, sendChannel, env);
+  };
+
+  const work: Promise<MessageHandlerOutput>[] = [];
   const { handlers } = env;
   for (const item of handlers) {
     // If it was removed, skip it
@@ -110,6 +114,18 @@ export const handleBotMessage = function (
       const output = handler.handle(config, {
         currentCommand: current,
         oldCommand: old,
+        postExtraMessage: (output) => {
+          logger.log("Posting extra message:", {
+            id,
+            type,
+            name: handler.tag,
+            output,
+            message: msg,
+            sendChannel,
+            env,
+          });
+          postMessage([output]);
+        },
       });
       if (output) {
         logger.log("Pass message to handler: ", {
@@ -122,7 +138,5 @@ export const handleBotMessage = function (
     }
   }
 
-  Promise.all(work).then((results) =>
-    sendMessageAfterParsing(results, msg, sendChannel, env)
-  );
+  Promise.all(work).then(postMessage);
 };

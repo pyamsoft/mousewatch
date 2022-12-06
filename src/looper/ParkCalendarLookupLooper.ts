@@ -1,5 +1,8 @@
 import { newLogger } from "../bot/logger";
-import { WatchResult } from "../commands/model/WatchResult";
+import {
+  createResultFromEntry,
+  WatchResult,
+} from "../commands/model/WatchResult";
 import { ParkCalendarLookupHandler } from "./ParkCalendarLooupHandler";
 import { ParkWatchCache } from "./ParkWatchCache";
 
@@ -43,7 +46,24 @@ export const ParkCalendarLookupLooper = {
 
       for (const magicKey of magicKeys) {
         const entries = ParkWatchCache.magicKeyWatches(magicKey);
-        jobs.push(ParkCalendarLookupHandler.lookup(magicKey, entries));
+        const dates = entries.map((e) => e.targetDate);
+        jobs.push(
+          ParkCalendarLookupHandler.lookup(magicKey, dates).then((lookup) => {
+            const results: WatchResult[] = [];
+
+            for (const res of lookup) {
+              const entry = entries.find(
+                (e) =>
+                  e.targetDate === res.targetDate && e.magicKey === res.magicKey
+              );
+              if (entry) {
+                results.push(createResultFromEntry(entry, res.parkResponse));
+              }
+            }
+
+            return results;
+          })
+        );
       }
 
       Promise.all(jobs).then((results) => {
