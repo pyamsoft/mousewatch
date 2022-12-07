@@ -16,6 +16,7 @@ import { parseDate } from "../looper/DateParser";
 import { ParkCalendarLookupLooper } from "../looper/ParkCalendarLookupLooper";
 import { ParkCalendarLookupHandler } from "../looper/ParkCalendarLooupHandler";
 import { ParkWatchCache } from "../looper/ParkWatchCache";
+import { WatchAlertMessageCache } from "../looper/WatchAlertMessageCache";
 import { ParkCommand, ParkCommandType } from "./command";
 import { watchEntryFromMessage } from "./model/WatchEntry";
 import { outputParkAvailability } from "./outputs/availability";
@@ -113,6 +114,11 @@ const sideEffectWatchLoop = function (dateList: DateTime[], message: Msg) {
               messageId: newMessage.id,
               result: res,
             });
+
+            // Cache into the AlertCache for later
+            //
+            // If a user responds to a message that we have a cached alert for, stop watching it.
+            WatchAlertMessageCache.cacheAlert(newMessage.id, res);
           })
           .catch((e) => {
             logger.error(e, "Error firing alert message: ", {
