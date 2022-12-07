@@ -11,6 +11,6 @@ COPY .eslintrc.js ./
 COPY .env.prod ./.env
 COPY src ./src
 
-RUN chmod 644 .env && yarn && yarn lint
+RUN chmod 644 .env && yarn && yarn build
 
-CMD [ "node", "./src/index.js" ]
+CMD [ "node", "./dist/index.js" ]
