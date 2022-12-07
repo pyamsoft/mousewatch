@@ -63,6 +63,8 @@ function lookupCalendar(
     magicKey,
     numberMonths,
   });
+  // There is a different authenticated URL that disney uses when you are signed in and go to pick your reservation date.
+  // This endpoint may return different data that the "global" one
   return jsonApi(
     `https://disneyland.disney.go.com/passes/blockout-dates/api/get-availability/?product-types=${magicKey}&destinationId=DLR&numMonths=${numberMonths}`,
     DISNEY_HEADERS
