@@ -14,21 +14,13 @@ along with a `prefix` (I use `!mouse`)
 
 See the `env.default` file for the expected format.
 
-# Prepare
-
-You have the option of setting up a PostgresQL database which can store
-bot data persistently. The author uses Heroku's free tier, and uses
-the following commands to set up a database
-
-```bash
-$ heroku addons:create heroku-postgresql:hobby-dev
-```
-
-You must then insert the DATABASE_URL into your `.env` file.
-
 # Running
 ```bash
-$ node ./index.js
+$ yarn start
+
+OR
+
+$ ./bin/dockerize
 ```
 
 # Usage
@@ -39,26 +31,44 @@ followed by the date you wish to check for availability
 ```
  <In #general>
 
- me >  !mouse show 01/04/2021
+ me >  !mouse show 01/24/2023
 
- bot > Spots are AVAILABLE on Jan 4, 2022. https://disneyland.disney.go.com/passes/blockout-dates/
+ bot > Tue, Jan 24, 2023: Inspire Key reservations are AVAILABLE
+       https://disneyland.disney.go.com/entry-reservation/
 
  me >  !mouse watch 01/04/2021
 
- bot > :thumbsup:
+ bot > :thumbsup: Watching Inspire Key reservations on Sun, Dec 18, 2022
+ 
  * A few minutes later... *
- bot > Spots are AVAILABLE on Jan 4, 2022. https://disneyland.disney.go.com/passes/blockout-dates/
+ 
+ bot > @You Sun, Dec 18, 2022: Inspire Key reservations are AVAILABLE
+       https://disneyland.disney.go.com/entry-reservation/
+       
+       (React to this message with an emoji to stop watching, otherwise I
+        will assume you did not get a reservation spot, and will keep watching.)
 
 ```
 
 ## Quirks
 
-Sometimes, randomly, the DLR availability endpoint will return inconsistent data as compared to the website.
-This is odd, particularly given that we hit the same endpoint and many times will receive the same data back
-from the API, but in busy periods the data source can give back wrong info. There is nothing that can be done
-about this. As a result, the tool will sometimes state a day is blocked when it is actually open, or open when
-it is actually blocked (though in practice, the first case has been observed more than once and the second case
-has never been observed).
+DLA reservation website is intentionally, sneakily, broken
+
+tl;dr - not logged in the calendar is a complete lie from the webpage (the robot is more legit),
+and logged in you must be on a specific page for the calendar to refresh for real.
+
+when you are checking the MK calendar if you are not logged in, the days are different from when you are logged in.
+
+if you are not logged in, the calendar fetches dates randomly, anywhere between once a minute and once an hour.
+
+if you are logged in, you MUST refresh the page from this [URL](https://disneyland.disney.go.com/entry-reservation/)
+
+if you do not go from this page and click the button, the website does not actually ask the calendar for new
+reservation data, it will instead feed you saved data. No matter who you try to check or uncheck in your party,
+it doesn't matter. You must return to that starting page URL and click the button or the calendar won't refresh.
+
+happy reserving.
+
 
 ## License
 

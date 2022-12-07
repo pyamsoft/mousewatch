@@ -12,12 +12,15 @@ export const outputParkAvailability = function (
   const { parkResponse, magicKey } = result;
 
   const link = parkResponse.available ? `\n${RESERVE_LINK.trim()}` : "";
+  const stopWatching = userId
+    ? `\n(React to this message with an emoji to stop watching, otherwise I will assume you did not get a reservation spot, and will keep watching.)`
+    : "";
 
   return `${userId ? `<@${userId}> ` : ""}${bold(
     parkResponse.date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
   )}: ${italic(magicKeyName(magicKey))} reservations are ${bold(
     parkResponse.available ? "AVAILABLE" : "BLOCKED"
-  )}${link}`;
+  )}${link}${stopWatching}`;
 };
 
 export const outputParkUnknown = function (
