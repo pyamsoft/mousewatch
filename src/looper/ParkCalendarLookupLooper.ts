@@ -8,6 +8,11 @@ import { ParkWatchCache } from "./ParkWatchCache";
 
 const logger = newLogger("ParkCalendarLookupLooper");
 
+/**
+ * Loop every 30 seconds
+ */
+const LOOP_TIME = 30 * 1000;
+
 // Have we started?
 let looping = false;
 
@@ -20,7 +25,7 @@ const beginLooping = function (command: () => void) {
   loopTimer = setInterval(() => {
     logger.log("Loop firing command");
     command();
-  }, 60 * 1000);
+  }, LOOP_TIME);
 };
 
 const stopLooping = function () {
@@ -37,6 +42,7 @@ export const ParkCalendarLookupLooper = {
       logger.log("loop() called but already looping");
       return;
     }
+    looping = true;
 
     logger.log("Begin loop!");
     beginLooping(() => {
@@ -80,6 +86,7 @@ export const ParkCalendarLookupLooper = {
       logger.log("stop() called but not looping");
       return;
     }
+    looping = false;
 
     logger.log("Stop loop!");
     stopLooping();

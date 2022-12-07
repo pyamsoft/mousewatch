@@ -1,9 +1,8 @@
 import { DateTime } from "luxon";
 import { newLogger } from "../bot/logger";
 import {
-  MessageHandler,
-  messageHandlerHelpText,
   messageHandlerOutput,
+  newMessageHandler,
 } from "../bot/message/MessageHandler";
 import {
   messageFromMsg,
@@ -12,24 +11,50 @@ import {
 } from "../bot/message/Msg";
 import { KeyedObject } from "../bot/model/KeyedObject";
 import { BotConfig } from "../config";
-import { parseDate } from "../looper/DateParser";
 import { ParkCalendarLookupLooper } from "../looper/ParkCalendarLookupLooper";
 import { ParkCalendarLookupHandler } from "../looper/ParkCalendarLooupHandler";
 import { ParkWatchCache } from "../looper/ParkWatchCache";
 import { WatchAlertMessageCache } from "../looper/WatchAlertMessageCache";
-import { ParkCommand, ParkCommandType } from "./command";
+import { ParkCommand, ParkCommandType, parseCommandDates } from "./command";
 import { watchEntryFromMessage } from "./model/WatchEntry";
 import { outputParkAvailability } from "./outputs/availability";
-import { outputDateErrorText } from "./outputs/dateerror";
 import { outputWatchStarted } from "./outputs/watch";
 
 const TAG = "WatchHandler";
 const logger = newLogger(TAG);
 
-export const WatchHandler: MessageHandler = {
-  tag: TAG,
+const cancelOldWatches = function (message: Msg, oldCommand: ParkCommand) {
+  if (oldCommand.isHelpCommand || oldCommand.type !== ParkCommandType.WATCH) {
+    return;
+  }
 
-  handle: function (
+  const { magicKey } = oldCommand;
+  const { dateList, error } = parseCommandDates(oldCommand);
+  if (error) {
+    return;
+  }
+
+  const { author } = message;
+  const userId = author.id;
+  for (const date of dateList) {
+    if (ParkWatchCache.removeWatch(userId, magicKey, date)) {
+      logger.log("Remove stale watch: ", {
+        userId,
+        magicKey,
+        date,
+      });
+    }
+  }
+
+  // If removing causes us no more watches, then stop the looper
+  if (ParkWatchCache.targetCalendars().length <= 0) {
+    ParkCalendarLookupLooper.stop();
+  }
+};
+
+export const WatchHandler = newMessageHandler(
+  TAG,
+  function (
     // @ts-ignore
     config: BotConfig,
     command: {
@@ -38,7 +63,7 @@ export const WatchHandler: MessageHandler = {
       message: Msg;
     }
   ) {
-    const { currentCommand, message } = command;
+    const { currentCommand, oldCommand, message } = command;
     if (
       currentCommand.isHelpCommand ||
       currentCommand.type !== ParkCommandType.WATCH
@@ -46,18 +71,17 @@ export const WatchHandler: MessageHandler = {
       return;
     }
 
-    logger.log("Handle watch message", currentCommand);
-    const { dates, magicKey } = currentCommand;
+    if (oldCommand) {
+      // Cancel any old watches
+      cancelOldWatches(message, oldCommand);
+    }
 
-    const dateList: DateTime[] = [];
-    for (const d of dates) {
-      const parsedDate = parseDate(d);
-      if (parsedDate) {
-        dateList.push(parsedDate);
-      } else {
-        logger.warn("Failed to parse date string: ", d);
-        return Promise.resolve(messageHandlerHelpText(outputDateErrorText(d)));
-      }
+    logger.log("Handle watch message", currentCommand);
+    const { magicKey } = currentCommand;
+    const { dateList, error } = parseCommandDates(currentCommand);
+
+    if (error) {
+      return error;
     }
 
     return ParkCalendarLookupHandler.lookup(magicKey, dateList).then(
@@ -66,7 +90,9 @@ export const WatchHandler: MessageHandler = {
         const notFoundDates: DateTime[] = [];
 
         for (const d of dateList) {
-          const res = results.find((r) => d === r.targetDate);
+          const res = results.find(
+            (r) => d.valueOf() === r.targetDate.valueOf()
+          );
           const key = d.toISO();
 
           // If we have availability, don't watch just immediately output
@@ -87,23 +113,22 @@ export const WatchHandler: MessageHandler = {
         }
 
         if (notFoundDates.length > 0) {
-          sideEffectWatchLoop(notFoundDates, message);
+          sideEffectWatchLoop(message);
         }
 
         return messageHandlerOutput(messages);
       }
     );
-  },
-};
+  }
+);
 
-const sideEffectWatchLoop = function (dateList: DateTime[], message: Msg) {
+const sideEffectWatchLoop = function (message: Msg) {
   const discordMsg = messageFromMsg(message);
   const sender = sendChannelFromMessage(discordMsg);
 
   ParkCalendarLookupLooper.loop((results) => {
-    for (const d of dateList) {
-      const res = results.find((r) => d === r.targetDate);
-      if (res && res.parkResponse.available) {
+    for (const res of results) {
+      if (res.parkResponse.available) {
         const msg = outputParkAvailability(res.userId, res);
 
         // This alert message is uncached and thus uneditable by the robot.

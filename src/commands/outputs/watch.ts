@@ -8,5 +8,7 @@ export const outputWatchStarted = function (
 ): string {
   return `:thumbsup: Watching ${italic(
     magicKeyName(magicKey)
-  )} reverations on ${bold(date.toLocaleString(DateTime.DATE_MED))}`;
+  )} reservations on ${bold(
+    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+  )}`;
 };

@@ -9,7 +9,7 @@ export const outputParkAvailability = function (
 ): string {
   const { parkResponse, magicKey } = result;
   return `${userId ? `<@${userId}> ` : ""}${bold(
-    parkResponse.date.toLocaleString(DateTime.DATE_MED)
+    parkResponse.date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
   )}: ${italic(magicKeyName(magicKey))} reservations are ${bold(
     parkResponse.available ? "AVAILABLE" : "BLOCKED"
   )}`;
@@ -19,7 +19,7 @@ export const outputParkUnknown = function (
   magicKey: MagicKeyType,
   date: DateTime
 ): string {
-  return `${bold(date.toLocaleString(DateTime.DATE_MED))}: ${italic(
-    magicKeyName(magicKey)
-  )} reservations are ${bold("UNKNOWN")}`;
+  return `${bold(
+    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+  )}: ${italic(magicKeyName(magicKey))} reservations are ${bold("UNKNOWN")}`;
 };

@@ -1,12 +1,25 @@
+import {
+  Client,
+  Intents,
+  Message,
+  MessageReaction,
+  PartialMessage,
+  PartialMessageReaction,
+  PartialUser,
+  User,
+} from "discord.js";
 import { BotConfig } from "../config";
-import { Client, Intents, Message, PartialMessage } from "discord.js";
 import { newLogger } from "./logger";
-import { KeyedMessageHandler, MessageHandler } from "./message/MessageHandler";
-import { KeyedObject } from "./model/KeyedObject";
-import { generateRandomId } from "./model/id";
-import { Listener, newListener } from "./model/listener";
-import { handleBotMessage } from "./message/messages";
 import { createMessageCache } from "./message/MessageCache";
+import {
+  KeyedMessageHandler,
+  MessageHandler,
+  ReactionHandler,
+} from "./message/MessageHandler";
+import { handleBotMessage, handleBotMessageReaction } from "./message/messages";
+import { generateRandomId } from "./model/id";
+import { KeyedObject } from "./model/KeyedObject";
+import { Listener, newListener } from "./model/listener";
 import { MessageEventType, MessageEventTypes } from "./model/MessageEventType";
 
 const logger = newLogger("DiscordBot");
@@ -14,7 +27,10 @@ const logger = newLogger("DiscordBot");
 export interface DiscordBot {
   login: () => Promise<boolean>;
 
-  addHandler: (type: MessageEventType, handler: MessageHandler) => string;
+  addHandler: (
+    type: MessageEventType,
+    handler: MessageHandler | ReactionHandler
+  ) => string;
 
   removeHandler: (id: string) => boolean;
 
@@ -27,6 +43,7 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
       Intents.FLAGS.GUILDS,
       Intents.FLAGS.DIRECT_MESSAGES,
       Intents.FLAGS.GUILD_MESSAGES,
+      Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
     ],
     partials: ["MESSAGE", "CHANNEL"],
   });
@@ -54,8 +71,27 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
     });
   };
 
+  const messageReactionHandler = function (
+    reaction: MessageReaction | PartialMessageReaction,
+    user: User | PartialUser
+  ) {
+    handleBotMessageReaction(
+      config,
+      MessageEventTypes.REACTION,
+      reaction,
+      user,
+      {
+        handlers: handlerList,
+        cache: messageCache,
+      }
+    );
+  };
+
   return Object.freeze({
-    addHandler: function (type: MessageEventType, handler: MessageHandler) {
+    addHandler: function (
+      type: MessageEventType,
+      handler: MessageHandler | ReactionHandler
+    ) {
       const id = generateRandomId();
       handlers[id] = { id, handler, type };
       logger.log("Add new handler: ", handlers[id]);
@@ -80,15 +116,22 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
       const readyHandler = function () {
         logger.log("Bot is ready!");
         logger.log("Watch for messages");
+
         client.on(MessageEventTypes.CREATE, messageHandler);
         client.on(MessageEventTypes.UPDATE, messageUpdateHandler);
+
+        client.on(MessageEventTypes.REACTION, messageReactionHandler);
       };
 
       const errorHandler = function (error: Error) {
         logger.error(error, "BOT ERROR");
         client.off("ready", readyHandler);
+
         client.off(MessageEventTypes.CREATE, messageHandler);
         client.off(MessageEventTypes.UPDATE, messageUpdateHandler);
+
+        client.off(MessageEventTypes.REACTION, messageReactionHandler);
+
         onStop();
       };
 
@@ -99,8 +142,12 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
       return newListener(() => {
         logger.log("Stop watching for messages");
         client.off("ready", readyHandler);
+
         client.off(MessageEventTypes.CREATE, messageHandler);
         client.off(MessageEventTypes.UPDATE, messageUpdateHandler);
+
+        client.off(MessageEventTypes.REACTION, messageReactionHandler);
+
         onStop();
       });
     },

@@ -1,5 +1,20 @@
+import { DateTime } from "luxon";
+import { newLogger } from "../bot/logger";
+import {
+  messageHandlerHelpText,
+  MessageHandlerOutput,
+} from "../bot/message/MessageHandler";
+import { Msg } from "../bot/message/Msg";
 import { BotConfig } from "../config";
+import { parseDate } from "../looper/DateParser";
+import { WatchAlertMessageCache } from "../looper/WatchAlertMessageCache";
 import { MagicKeyType } from "./model/MagicKeyType";
+import {
+  outputDateErrorText,
+  outputDateMissingText,
+} from "./outputs/dateerror";
+
+const logger = newLogger("Commands");
 
 export enum ParkCommandType {
   SHOW = "SHOW",
@@ -94,21 +109,50 @@ export const stringContentToParkCommand = function (
     content
   );
 
-  let needsDatesButHasNone: boolean;
-  if (type === ParkCommandType.CANCEL || type === ParkCommandType.STATUS) {
-    needsDatesButHasNone = false;
-  } else {
-    needsDatesButHasNone = dates.length <= 0;
-  }
-
   return {
     isHelpCommand:
       isHelpCommand ||
       type === ParkCommandType.NONE ||
-      type === ParkCommandType.HELP ||
-      needsDatesButHasNone,
+      type === ParkCommandType.HELP,
     type,
     magicKey,
     dates,
   };
+};
+
+export const parseCommandDates = function (command: ParkCommand): {
+  dateList: DateTime[];
+  error: Promise<MessageHandlerOutput> | undefined;
+} {
+  const { dates } = command;
+
+  const dateList: DateTime[] = [];
+  for (const d of dates) {
+    const parsedDate = parseDate(d);
+    if (parsedDate) {
+      dateList.push(parsedDate);
+    } else {
+      logger.warn("Failed to parse date string: ", d);
+      return {
+        dateList: [],
+        error: Promise.resolve(messageHandlerHelpText(outputDateErrorText(d))),
+      };
+    }
+  }
+
+  if (dateList.length <= 0) {
+    logger.warn("Need at least one date to watch");
+    return {
+      dateList: [],
+      error: Promise.resolve(messageHandlerHelpText(outputDateMissingText())),
+    };
+  }
+
+  return { dateList, error: undefined };
+};
+
+export const clearWatchOnReaction = function (message: Msg): boolean {
+  const cachedAlert = WatchAlertMessageCache.getCachedAlert(message.id);
+  logger.log("Cached Alert: ", cachedAlert);
+  return !!cachedAlert;
 };

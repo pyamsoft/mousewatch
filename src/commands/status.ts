@@ -1,7 +1,7 @@
 import { newLogger } from "../bot/logger";
 import {
-  MessageHandler,
   messageHandlerHelpText,
+  newMessageHandler,
 } from "../bot/message/MessageHandler";
 import { Msg } from "../bot/message/Msg";
 import { BotConfig } from "../config";
@@ -11,10 +11,9 @@ import { outputStatusText } from "./outputs/status";
 const TAG = "StatusHandler";
 const logger = newLogger(TAG);
 
-export const StatusHandler: MessageHandler = {
-  tag: TAG,
-
-  handle: function (
+export const StatusHandler = newMessageHandler(
+  TAG,
+  function (
     config: BotConfig,
     command: {
       currentCommand: ParkCommand;
@@ -35,5 +34,5 @@ export const StatusHandler: MessageHandler = {
     return outputStatusText(config).then((text) =>
       messageHandlerHelpText(text)
     );
-  },
-};
+  }
+);

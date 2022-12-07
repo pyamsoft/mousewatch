@@ -6,12 +6,14 @@ const cache = new Set<WatchEntry>();
 
 const removeWatches = function (
   userId: string,
+  magicKey: MagicKeyType,
   optionalDate: DateTime | undefined
-) {
+): boolean {
+  const oldSize = cache.size;
   const deleteMe: WatchEntry[] = [];
 
   cache.forEach((e) => {
-    if (e.userId === userId) {
+    if (e.userId === userId && e.magicKey === magicKey) {
       if (!optionalDate || optionalDate.valueOf() === e.targetDate.valueOf()) {
         deleteMe.push(e);
       }
@@ -21,6 +23,8 @@ const removeWatches = function (
   for (const d of deleteMe) {
     cache.delete(d);
   }
+
+  return oldSize !== cache.size;
 };
 
 export const ParkWatchCache = {
@@ -51,7 +55,7 @@ export const ParkWatchCache = {
     return entries;
   },
 
-  addWatch: function (entry: WatchEntry) {
+  addWatch: function (entry: WatchEntry): boolean {
     let dupe = false;
 
     cache.forEach((e) => {
@@ -67,13 +71,19 @@ export const ParkWatchCache = {
     if (!dupe) {
       cache.add(entry);
     }
+
+    return !dupe;
   },
 
-  removeWatch: function (userId: string, date: DateTime) {
-    removeWatches(userId, date);
+  removeWatch: function (
+    userId: string,
+    magicKey: MagicKeyType,
+    date: DateTime
+  ): boolean {
+    return removeWatches(userId, magicKey, date);
   },
 
-  clearWatches: function (userId: string) {
-    removeWatches(userId, undefined);
+  clearWatches: function (userId: string, magicKey: MagicKeyType): boolean {
+    return removeWatches(userId, magicKey, undefined);
   },
 };

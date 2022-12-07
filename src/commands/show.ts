@@ -1,29 +1,24 @@
-import { DateTime } from "luxon";
 import { newLogger } from "../bot/logger";
 import {
-  MessageHandler,
-  messageHandlerHelpText,
   messageHandlerOutput,
+  newMessageHandler,
 } from "../bot/message/MessageHandler";
 import { Msg } from "../bot/message/Msg";
 import { KeyedObject } from "../bot/model/KeyedObject";
 import { BotConfig } from "../config";
-import { parseDate } from "../looper/DateParser";
 import { ParkCalendarLookupHandler } from "../looper/ParkCalendarLooupHandler";
-import { ParkCommand, ParkCommandType } from "./command";
+import { ParkCommand, ParkCommandType, parseCommandDates } from "./command";
 import {
   outputParkAvailability,
   outputParkUnknown,
 } from "./outputs/availability";
-import { outputDateErrorText } from "./outputs/dateerror";
 
 const TAG = "ShowHandler";
 const logger = newLogger(TAG);
 
-export const ShowHandler: MessageHandler = {
-  tag: TAG,
-
-  handle: function (
+export const ShowHandler = newMessageHandler(
+  TAG,
+  function (
     // @ts-ignore
     config: BotConfig,
     command: {
@@ -42,17 +37,11 @@ export const ShowHandler: MessageHandler = {
     }
 
     logger.log("Handle show message", currentCommand);
-    const { dates, magicKey } = currentCommand;
+    const { magicKey } = currentCommand;
+    const { dateList, error } = parseCommandDates(currentCommand);
 
-    const dateList: DateTime[] = [];
-    for (const d of dates) {
-      const parsedDate = parseDate(d);
-      if (parsedDate) {
-        dateList.push(parsedDate);
-      } else {
-        logger.warn("Failed to parse date string: ", d);
-        return Promise.resolve(messageHandlerHelpText(outputDateErrorText(d)));
-      }
+    if (error) {
+      return error;
     }
 
     return ParkCalendarLookupHandler.lookup(magicKey, dateList).then(
@@ -71,5 +60,5 @@ export const ShowHandler: MessageHandler = {
         return messageHandlerOutput(messages);
       }
     );
-  },
-};
+  }
+);

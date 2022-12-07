@@ -1,7 +1,7 @@
 import { newLogger } from "../bot/logger";
 import {
-  MessageHandler,
   messageHandlerHelpText,
+  newMessageHandler,
 } from "../bot/message/MessageHandler";
 import { Msg } from "../bot/message/Msg";
 import { BotConfig } from "../config";
@@ -11,10 +11,9 @@ import { outputHelpText } from "./outputs/help";
 const TAG = "HelpHandler";
 const logger = newLogger(TAG);
 
-export const HelpHandler: MessageHandler = {
-  tag: TAG,
-
-  handle: function (
+export const HelpHandler = newMessageHandler(
+  TAG,
+  function (
     config: BotConfig,
     command: {
       currentCommand: ParkCommand;
@@ -30,5 +29,5 @@ export const HelpHandler: MessageHandler = {
 
     logger.log("Handle help message", currentCommand);
     return Promise.resolve(messageHandlerHelpText(outputHelpText(config)));
-  },
-};
+  }
+);

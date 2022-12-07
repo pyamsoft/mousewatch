@@ -1,16 +1,28 @@
-import { Message, PartialMessage } from "discord.js";
+import {
+  Message,
+  MessageReaction,
+  PartialMessage,
+  PartialMessageReaction,
+  PartialUser,
+  User,
+} from "discord.js";
 import { stringContentToParkCommand } from "../../commands/command";
 import { BotConfig } from "../../config";
 import { newLogger } from "../logger";
 import { KeyedObject } from "../model/KeyedObject";
-import { MessageEventType } from "../model/MessageEventType";
+import { MessageEventType, MessageEventTypes } from "../model/MessageEventType";
 import {
   createCommunicationMessage,
   createCommunicationResult,
   sendMessage,
 } from "./communicate";
 import { MessageCache } from "./MessageCache";
-import { KeyedMessageHandler, MessageHandlerOutput } from "./MessageHandler";
+import {
+  KeyedMessageHandler,
+  MessageHandler,
+  MessageHandlerOutput,
+  ReactionHandler,
+} from "./MessageHandler";
 import {
   logMsg,
   Msg,
@@ -82,7 +94,14 @@ export const handleBotMessage = function (
     cache: MessageCache;
   }
 ) {
+  // Reactions are handled by a different function
+  if (eventType === MessageEventTypes.REACTION) {
+    return;
+  }
+
   const msg = msgFromMessage(message);
+
+  // Normal message handling
   if (!validateMessage(config, msg)) {
     return;
   }
@@ -97,10 +116,6 @@ export const handleBotMessage = function (
     ? stringContentToParkCommand(config, oldMsg.content)
     : undefined;
 
-  const postMessage = function (outputs: MessageHandlerOutput[]) {
-    sendMessageAfterParsing(outputs, msg, sendChannel, env);
-  };
-
   const work: Promise<MessageHandlerOutput>[] = [];
   const { handlers } = env;
   for (const item of handlers) {
@@ -111,11 +126,22 @@ export const handleBotMessage = function (
 
     const { handler, id, type } = item;
     if (type === eventType) {
-      const output = handler.handle(config, {
-        currentCommand: current,
-        oldCommand: old,
-        message: msg,
-      });
+      let output: Promise<MessageHandlerOutput> | undefined = undefined;
+      if (handler.objectType === "MessageHandler") {
+        const messageHandler = handler as MessageHandler;
+        output = messageHandler.handle(config, {
+          currentCommand: current,
+          oldCommand: old,
+          message: msg,
+        });
+      } else {
+        logger.warn(
+          "Handler type cannot handle bot messages: ",
+          handler.objectType
+        );
+        return;
+      }
+
       if (output) {
         logger.log("Pass message to handler: ", {
           id,
@@ -127,5 +153,45 @@ export const handleBotMessage = function (
     }
   }
 
-  Promise.all(work).then(postMessage);
+  Promise.all(work).then((outputs) =>
+    sendMessageAfterParsing(outputs, msg, sendChannel, env)
+  );
+};
+
+export const handleBotMessageReaction = function (
+  config: BotConfig,
+  eventType: MessageEventType,
+  reaction: MessageReaction | PartialMessageReaction,
+  user: User | PartialUser,
+  env: {
+    handlers: KeyedMessageHandler[];
+    cache: MessageCache;
+  }
+) {
+  // Messages are handled by a different function
+  if (eventType !== MessageEventTypes.REACTION) {
+    return;
+  }
+
+  const { handlers } = env;
+  for (const item of handlers) {
+    // If it was removed, skip it
+    if (!item) {
+      continue;
+    }
+
+    const { handler, type } = item;
+    if (type === eventType) {
+      if (handler.objectType === "ReactionHandler") {
+        const reactionHandler = handler as ReactionHandler;
+        reactionHandler.handle(config, reaction, user);
+      } else {
+        logger.warn(
+          "Handler type cannot handle bot reactions: ",
+          handler.objectType
+        );
+        return;
+      }
+    }
+  }
 };

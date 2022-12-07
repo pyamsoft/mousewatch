@@ -13,6 +13,29 @@ export const WatchAlertMessageCache = {
   },
 
   removeCachedAlert: function (messageId: string) {
+    const cached = cache[messageId];
     cache[messageId] = undefined;
+
+    // If we have removed a cached message for a result, go through the cache and remove all other results that
+    // look like it
+    if (cached) {
+      const removeOthers: string[] = [];
+      for (const key of Object.keys(cached)) {
+        const value = cache[key];
+        if (value) {
+          if (
+            value.userId === cached.userId &&
+            value.magicKey === cached.magicKey &&
+            value.targetDate.valueOf() === cached.targetDate.valueOf()
+          ) {
+            removeOthers.push(key);
+          }
+        }
+      }
+
+      for (const removeKey of removeOthers) {
+        cache[removeKey] = undefined;
+      }
+    }
   },
 };

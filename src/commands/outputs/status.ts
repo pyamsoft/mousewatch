@@ -49,7 +49,8 @@ export const outputStatusText = function (config: BotConfig): Promise<string> {
         textBlock += `${keyName}\n`;
         for (const block of userBlocks) {
           textBlock += `    ${block.userName}: ${block.dates
-            .map((d) => d.toLocaleString(DateTime.DATE_MED))
+            // Use DATE_SHORT so user knows the format we expect
+            .map((d) => d.toLocaleString(DateTime.DATE_SHORT))
             .join(", ")}`;
         }
         textBlock += `\n\n`;
