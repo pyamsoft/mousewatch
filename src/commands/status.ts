@@ -2,8 +2,8 @@ import { newLogger } from "../bot/logger";
 import {
   MessageHandler,
   messageHandlerHelpText,
-  MessageHandlerOutput,
 } from "../bot/message/MessageHandler";
+import { Msg } from "../bot/message/Msg";
 import { BotConfig } from "../config";
 import { ParkCommand, ParkCommandType } from "./command";
 import { outputStatusText } from "./outputs/status";
@@ -19,7 +19,7 @@ export const StatusHandler: MessageHandler = {
     command: {
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
-      postExtraMessage: (output: MessageHandlerOutput) => void;
+      message: Msg;
     }
   ) {
     // Only handle status

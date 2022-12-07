@@ -4,8 +4,8 @@ import {
   MessageHandler,
   messageHandlerHelpText,
   messageHandlerOutput,
-  MessageHandlerOutput,
 } from "../bot/message/MessageHandler";
+import { Msg } from "../bot/message/Msg";
 import { KeyedObject } from "../bot/model/KeyedObject";
 import { BotConfig } from "../config";
 import { parseDate } from "../looper/DateParser";
@@ -29,7 +29,7 @@ export const ShowHandler: MessageHandler = {
     command: {
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
-      postExtraMessage: (output: MessageHandlerOutput) => void;
+      message: Msg;
     }
   ) {
     // Only handle status
@@ -62,7 +62,7 @@ export const ShowHandler: MessageHandler = {
           const res = results.find((r) => d === r.targetDate);
           const key = d.toISO();
           if (res) {
-            messages[key] = outputParkAvailability(res);
+            messages[key] = outputParkAvailability(undefined, res);
           } else {
             messages[key] = outputParkUnknown(magicKey, d);
           }

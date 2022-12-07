@@ -1,11 +1,12 @@
+import { newLogger } from "../bot/logger";
 import {
   MessageHandler,
-  messageHandlerHelpText, MessageHandlerOutput,
+  messageHandlerHelpText,
 } from "../bot/message/MessageHandler";
-import { newLogger } from "../bot/logger";
+import { Msg } from "../bot/message/Msg";
 import { BotConfig } from "../config";
-import { outputHelpText } from "./outputs/help";
 import { ParkCommand } from "./command";
+import { outputHelpText } from "./outputs/help";
 
 const TAG = "HelpHandler";
 const logger = newLogger(TAG);
@@ -18,7 +19,7 @@ export const HelpHandler: MessageHandler = {
     command: {
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
-      postExtraMessage: (output: MessageHandlerOutput) => void;
+      message: Msg;
     }
   ) {
     // Only handle help

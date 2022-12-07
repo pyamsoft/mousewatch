@@ -4,6 +4,7 @@ import { MessageEventTypes } from "./bot/model/MessageEventType";
 import { HelpHandler } from "./commands/help";
 import { ShowHandler } from "./commands/show";
 import { StatusHandler } from "./commands/status";
+import { WatchHandler } from "./commands/watch";
 import { sourceConfig } from "./config";
 
 const logger = newLogger("MouseWatch");
@@ -26,6 +27,15 @@ const updateStatusHandler = bot.addHandler(
 const createShowHandler = bot.addHandler(MessageEventTypes.CREATE, ShowHandler);
 const updateShowHandler = bot.addHandler(MessageEventTypes.UPDATE, ShowHandler);
 
+const createWatchHandler = bot.addHandler(
+  MessageEventTypes.CREATE,
+  WatchHandler
+);
+const updateWatchHandler = bot.addHandler(
+  MessageEventTypes.UPDATE,
+  WatchHandler
+);
+
 const watcher = bot.watchMessages(() => {
   bot.removeHandler(createHelpHandler);
   bot.removeHandler(updateHelpHandler);
@@ -35,6 +45,9 @@ const watcher = bot.watchMessages(() => {
 
   bot.removeHandler(createShowHandler);
   bot.removeHandler(updateShowHandler);
+
+  bot.removeHandler(createWatchHandler);
+  bot.removeHandler(updateWatchHandler);
 });
 
 bot.login().then((loggedIn) => {

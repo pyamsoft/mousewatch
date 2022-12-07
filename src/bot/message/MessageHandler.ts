@@ -1,6 +1,7 @@
 import { ParkCommand } from "../../commands/command";
 import { BotConfig } from "../../config";
 import { KeyedObject } from "../model/KeyedObject";
+import { Msg } from "./Msg";
 
 export interface KeyedMessageHandler {
   id: string;
@@ -42,7 +43,7 @@ export interface MessageHandler {
     command: {
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
-      postExtraMessage: (output: MessageHandlerOutput) => void;
+      message: Msg;
     }
   ) => Promise<MessageHandlerOutput> | undefined;
 }

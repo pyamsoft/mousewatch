@@ -3,28 +3,22 @@ import { MagicKeyType } from "./MagicKeyType";
 import { ParkCalendarResponse } from "./ParkCalendarResponse";
 import { WatchEntry } from "./WatchEntry";
 
-export interface LookupResult {
-  objectType: "LookupResult";
-
-  // Info
+export interface BaseResult {
   magicKey: MagicKeyType;
   targetDate: DateTime;
   parkResponse: ParkCalendarResponse;
 }
 
-export interface WatchResult {
+export interface LookupResult extends BaseResult {
+  objectType: "LookupResult";
+}
+
+export interface WatchResult extends BaseResult {
   objectType: "WatchResult";
   userId: string;
   userName: string;
   messageId: string;
   channelId: string;
-
-  // Info
-  magicKey: MagicKeyType;
-  targetDate: DateTime;
-
-  // Response
-  parkResponse: ParkCalendarResponse;
 }
 
 export const createLookupResult = function (

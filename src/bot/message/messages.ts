@@ -114,18 +114,7 @@ export const handleBotMessage = function (
       const output = handler.handle(config, {
         currentCommand: current,
         oldCommand: old,
-        postExtraMessage: (output) => {
-          logger.log("Posting extra message:", {
-            id,
-            type,
-            name: handler.tag,
-            output,
-            message: msg,
-            sendChannel,
-            env,
-          });
-          postMessage([output]);
-        },
+        message: msg,
       });
       if (output) {
         logger.log("Pass message to handler: ", {

@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { Msg } from "../../bot/message/Msg";
 import { MagicKeyType } from "./MagicKeyType";
 
 export interface WatchEntry {
@@ -28,4 +29,19 @@ export const createWatchEntry = function (data: {
     objectType: "WatchEntry",
     ...data,
   };
+};
+
+export const watchEntryFromMessage = function (data: {
+  message: Msg;
+  magicKey: MagicKeyType;
+  targetDate: DateTime;
+}): WatchEntry {
+  const { message, ...rest } = data;
+  return createWatchEntry({
+    ...rest,
+    userId: message.author.id,
+    userName: message.author.username,
+    messageId: message.id,
+    channelId: message.channel.id,
+  });
 };
