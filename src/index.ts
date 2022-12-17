@@ -8,6 +8,7 @@ import { StatusHandler } from "./commands/status";
 import { StopHandler } from "./commands/stop";
 import { WatchHandler } from "./commands/watch";
 import { sourceConfig } from "./config";
+import { registerPeriodicHealthCheck } from "./health";
 import { ReactionStopWatchHandler } from "./reactions/stopwatch";
 
 const logger = newLogger("MouseWatch");
@@ -75,7 +76,11 @@ const main = function () {
     ReactionStopWatchHandler
   );
 
+  const health = registerPeriodicHealthCheck(config.healthCheckUrl);
+
   const watcher = bot.watchMessages(() => {
+    health.unregister();
+
     bot.removeHandler(createHelpHandler);
     bot.removeHandler(updateHelpHandler);
 
