@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    node: true,
+    "shared-node-browser": true,
     commonjs: true,
     es2021: true,
   },
