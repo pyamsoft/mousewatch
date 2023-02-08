@@ -1,9 +1,6 @@
-import axios, { AxiosRequestHeaders, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
-export const jsonApi = function <T>(
-  url: string,
-  headers?: AxiosRequestHeaders
-): Promise<T> {
+export const jsonApi = function <T>(url: string, headers?: object): Promise<T> {
   return axios({
     method: "GET",
     url,
