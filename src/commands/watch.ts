@@ -128,31 +128,31 @@ const sideEffectWatchLoop = function (message: Msg) {
 
   ParkCalendarLookupLooper.loop((results) => {
     for (const res of results) {
-      if (res.parkResponse) {
-        const msg = outputParkAvailability(res.userId, res);
-
-        logger.log("FIRE", res)
-
-        // This alert message is uncached and thus uneditable by the robot.
-        sender
-          .send(msg)
-          .then((newMessage) => {
-            logger.log("WATCH: Fired alert message: ", {
-              messageId: newMessage.id,
-              result: res,
-            });
-
-            // Cache into the AlertCache for later
-            //
-            // If a user responds to a message that we have a cached alert for, stop watching it.
-            WatchAlertMessageCache.cacheAlert(newMessage.id, res);
-          })
-          .catch((e) => {
-            logger.error(e, "Error firing alert message: ", {
-              result: res,
-            });
-          });
+      if (!res.parkResponse.available) {
+        continue;
       }
+
+      const msg = outputParkAvailability(res.userId, res);
+
+      // This alert message is uncached and thus uneditable by the robot.
+      sender
+        .send(msg)
+        .then((newMessage) => {
+          logger.log("WATCH: Fired alert message: ", {
+            messageId: newMessage.id,
+            result: res,
+          });
+
+          // Cache into the AlertCache for later
+          //
+          // If a user responds to a message that we have a cached alert for, stop watching it.
+          WatchAlertMessageCache.cacheAlert(newMessage.id, res);
+        })
+        .catch((e) => {
+          logger.error(e, "Error firing alert message: ", {
+            result: res,
+          });
+        });
     }
   });
 };

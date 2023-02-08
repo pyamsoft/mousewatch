@@ -53,7 +53,9 @@ export const ParkCalendarLookupLooper = {
       for (const magicKey of magicKeys) {
         const entries = ParkWatchCache.magicKeyWatches(magicKey);
         const dates = entries.map((e) => e.targetDate);
-        logger.log("Entries: ", entries)
+
+        logger.log("Lookup dates for watch entries: ", entries)
+
         jobs.push(
           ParkCalendarLookupHandler.lookup(magicKey, dates).then((lookup) => {
             const results: WatchResult[] = [];
