@@ -128,8 +128,10 @@ const sideEffectWatchLoop = function (message: Msg) {
 
   ParkCalendarLookupLooper.loop((results) => {
     for (const res of results) {
-      if (res.parkResponse.available) {
+      if (res.parkResponse) {
         const msg = outputParkAvailability(res.userId, res);
+
+        logger.log("FIRE", res)
 
         // This alert message is uncached and thus uneditable by the robot.
         sender
