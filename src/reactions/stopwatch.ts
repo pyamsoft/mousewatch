@@ -31,6 +31,12 @@ export const ReactionStopWatchHandler = newReactionHandler(
     // If its a custom emoji, we need the id, otherwise the name as a unicode emoji works fine
     const emojiContent = emoji ? emoji.id || emoji.name : undefined;
 
+    logger.log(
+      "Reaction captured for message: ",
+      targetMessageId,
+      emojiContent
+    );
+
     // See if we have sent the alert message
     const cachedAlert = WatchAlertMessageCache.getCachedAlert(targetMessageId);
     if (!cachedAlert) {
