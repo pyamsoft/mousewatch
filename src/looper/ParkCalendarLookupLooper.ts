@@ -55,6 +55,7 @@ export const ParkCalendarLookupLooper = {
         const dates = entries.map((e) => e.targetDate);
         jobs.push(
           ParkCalendarLookupHandler.lookup(magicKey, dates).then((lookup) => {
+            logger.log("Checked calendar for key: ", magicKey, dates);
             const results: WatchResult[] = [];
 
             for (const res of lookup) {
@@ -73,6 +74,7 @@ export const ParkCalendarLookupLooper = {
         );
       }
 
+      logger.log("Wait for all jobs", jobs);
       Promise.all(jobs).then((results) => {
         for (const watchResults of results) {
           onResultsReceived(watchResults);
