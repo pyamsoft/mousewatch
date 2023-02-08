@@ -19,7 +19,6 @@ import { ParkCommand, ParkCommandType, parseCommandDates } from "./command";
 import { watchEntryFromMessage } from "./model/WatchEntry";
 import { outputParkAvailability } from "./outputs/availability";
 import { outputWatchStarted } from "./outputs/watch";
-import { WatchResult } from "./model/WatchResult";
 
 const TAG = "WatchHandler";
 const logger = newLogger(TAG);
@@ -123,53 +122,13 @@ export const WatchHandler = newMessageHandler(
   }
 );
 
-const alreadySeenResult = function (r1: WatchResult, r2: WatchResult): boolean {
-  // If channels don't match, then maybe new
-  if (r1.channelId !== r2.channelId) {
-    return false;
-  }
-
-  // If messages don't match, then maybe new
-  if (r1.messageId !== r2.messageId) {
-    return false;
-  }
-
-  // If users don't match, then maybe new
-  if (r1.userId !== r2.userId) {
-    return false;
-  }
-
-  // If key types don't match, then maybe new
-  if (r1.magicKey !== r2.magicKey) {
-    return false;
-  }
-
-  // If we have seen the exact same date already, then we have seen this
-  return r1.targetDate.valueOf() === r2.targetDate.valueOf();
-};
-
 const sideEffectWatchLoop = function (message: Msg) {
   const discordMsg = messageFromMsg(message);
   const sender = sendChannelFromMessage(discordMsg);
 
   ParkCalendarLookupLooper.loop((results) => {
-    // For some reason, a single watch fires like 5 messages out.
-    // We try to avoid this mass spam by de-duping at the sending point
-    const avoidMassSpamBug: WatchResult[] = [];
     for (const res of results) {
       if (res.parkResponse.available) {
-
-        // If we have already sent this message before, do not send it again
-        const alreadySent = avoidMassSpamBug.find((s) =>
-          alreadySeenResult(s, res)
-        );
-        if (alreadySent) {
-          logger.warn("[BUG]: We have already sent this Result!", res);
-          continue;
-        } else {
-          avoidMassSpamBug.push(res);
-        }
-
         const msg = outputParkAvailability(res.userId, res);
 
         // This alert message is uncached and thus uneditable by the robot.
