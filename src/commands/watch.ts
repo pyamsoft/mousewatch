@@ -152,11 +152,11 @@ const sideEffectWatchLoop = function (message: Msg) {
   const discordMsg = messageFromMsg(message);
   const sender = sendChannelFromMessage(discordMsg);
 
-  // For some reason, a single watch fires like 5 messages out.
-  // We try to avoid this mass spam by de-duping at the sending point
-  const avoidMassSpamBug: WatchResult[] = [];
-
   ParkCalendarLookupLooper.loop((results) => {
+    // For some reason, a single watch fires like 5 messages out.
+    // We try to avoid this mass spam by de-duping at the sending point
+    const avoidMassSpamBug: WatchResult[] = [];
+
     for (const res of results) {
       if (!res.parkResponse.available) {
         continue;
