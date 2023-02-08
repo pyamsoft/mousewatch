@@ -158,6 +158,8 @@ const sideEffectWatchLoop = function (message: Msg) {
     const avoidMassSpamBug: WatchResult[] = [];
     for (const res of results) {
       if (res.parkResponse.available) {
+
+        // If we have already sent this message before, do not send it again
         const alreadySent = avoidMassSpamBug.find((s) =>
           alreadySeenResult(s, res)
         );
