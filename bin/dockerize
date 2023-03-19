@@ -1,3 +1,9 @@
 #!/bin/sh
 
-exec sudo docker build . -t pyamsoft/mousewatch -f ./Dockerfile
+_cmd="sudo docker"
+if command -v podman > /dev/null; then
+  _cmd="podman"
+fi
+
+# shellcheck disable=SC2086
+exec ${_cmd} build . -t pyamsoft/mousewatch -f ./Dockerfile
