@@ -14,6 +14,10 @@ along with a `prefix` (I use `!mouse`)
 
 See the `env.default` file for the expected format.
 
+You will also need to set the bot up in the Discord Developer Portal. The bot
+needs access  to at least the "Server Members Intent" and "Presence Intent".  
+See [here](https://github.com/pyamsoft/mousewatch/issues/9) for more details.
+
 # Running
 ```bash
 $ yarn start
@@ -49,6 +53,14 @@ followed by the date you wish to check for availability
         will assume you did not get a reservation spot, and will keep watching.)
 
 ```
+
+## Customization
+
+You can have the bot only watch and reply in a designated channel by providing the
+`BOT_CHANNEL_ID` variable in the `.env` file, otherwise the bot will watch and reply from
+all channels.
+
+The bot will always watch and reply in individual DMs.
 
 ## Quirks
 
