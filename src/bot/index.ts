@@ -58,10 +58,17 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
   const client = new Client({
     intents: [
       GatewayIntentBits.Guilds,
-      GatewayIntentBits.DirectMessages,
-      GatewayIntentBits.DirectMessageReactions,
+
+      // Needed to read messages
       GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.DirectMessages,
+
+      // Needed for reactions
       GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.DirectMessageReactions,
+
+      // Need to read message content
+      GatewayIntentBits.MessageContent,
     ],
     partials: [Partials.Message, Partials.Channel],
   });
