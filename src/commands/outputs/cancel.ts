@@ -24,7 +24,9 @@ export const outputStopWatch = function (
 ): string {
   return `:negative_squared_cross_mark: Stopped watching ${italic(
     magicKeyName(magicKey)
-  )} reservations on ${bold(date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY))}`;
+  )} reservations on ${bold(
+    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+  )}`;
 };
 
 export const outputClearWatch = function (
@@ -42,7 +44,9 @@ export const outputCancelFailed = function (
 ): string {
   return `:x: Unable to stop watching ${italic(
     magicKeyName(magicKey)
-  )} reservations on ${bold(date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY))}`;
+  )} reservations on ${bold(
+    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+  )}`;
 };
 
 export const outputClearFailed = function (
