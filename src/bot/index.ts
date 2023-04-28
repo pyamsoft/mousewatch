@@ -16,11 +16,12 @@
 
 import {
   Client,
-  Intents,
+  GatewayIntentBits,
   Message,
   MessageReaction,
   PartialMessage,
   PartialMessageReaction,
+  Partials,
   PartialUser,
   User,
 } from "discord.js";
@@ -56,13 +57,13 @@ export interface DiscordBot {
 export const initializeBot = function (config: BotConfig): DiscordBot {
   const client = new Client({
     intents: [
-      Intents.FLAGS.GUILDS,
-      Intents.FLAGS.DIRECT_MESSAGES,
-      Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-      Intents.FLAGS.GUILD_MESSAGES,
-      Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.DirectMessageReactions,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildMessageReactions,
     ],
-    partials: ["MESSAGE", "CHANNEL"],
+    partials: [Partials.Message, Partials.Channel],
   });
 
   const handlers: KeyedObject<KeyedMessageHandler | undefined> = {};

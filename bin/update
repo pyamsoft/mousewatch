@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec ./node_modules/.bin/ncu -u || exit 1
+exit 0

@@ -65,6 +65,10 @@ export const StopHandler = newMessageHandler(
       const outputs: KeyedObject<string> = {};
       for (const d of dateList) {
         const key = d.toISO();
+        if (!key) {
+          continue;
+        }
+
         if (ParkWatchCache.removeWatch(userId, magicKey, d)) {
           outputs[key] = outputStopWatch(magicKey, d);
         } else {

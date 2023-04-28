@@ -66,6 +66,10 @@ export const ShowHandler = newMessageHandler(
         for (const d of dateList) {
           const res = results.find((r) => d === r.targetDate);
           const key = d.toISO();
+          if (!key) {
+            continue;
+          }
+
           if (res) {
             messages[key] = outputParkAvailability(undefined, res);
           } else {

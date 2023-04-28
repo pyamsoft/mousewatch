@@ -15,7 +15,7 @@ along with a `prefix` (I use `!mouse`)
 See the `env.default` file for the expected format.
 
 You will also need to set the bot up in the Discord Developer Portal. The bot
-needs access  to at least the "Server Members Intent" and "Presence Intent".  
+needs access to at least the "Server Members Intent" and "Presence Intent".  
 See [here](https://github.com/pyamsoft/mousewatch/issues/9) for more details.
 
 # Running

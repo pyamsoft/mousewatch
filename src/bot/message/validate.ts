@@ -16,7 +16,7 @@
 
 import { Msg } from "./Msg";
 import { BotConfig } from "../../config";
-import { Channel } from "discord.js";
+import { Channel, ChannelType } from "discord.js";
 
 export const validateMessageHasId = function (message: Msg): boolean {
   return !!message.id;
@@ -32,7 +32,7 @@ export const validateMessageHasChannel = function (message: Msg): boolean {
 
 export const validateMessageIsTextChannel = function (message: Msg): boolean {
   const type = message.channel.type;
-  return type === "GUILD_TEXT" || type === "DM";
+  return type === ChannelType.GuildText || type === ChannelType.DM;
 };
 
 export const validateMessageIsSpecificChannel = function (
@@ -77,9 +77,8 @@ export const validateMessage = function (
     return false;
   }
 
-
   const type = message.channel.type;
-  if (type === "GUILD_TEXT") {
+  if (type === ChannelType.GuildText) {
     if (!validateMessageIsSpecificChannel(config, message)) {
       return false;
     }

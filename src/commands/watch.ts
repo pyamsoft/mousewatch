@@ -111,6 +111,9 @@ export const WatchHandler = newMessageHandler(
             (r) => d.valueOf() === r.targetDate.valueOf()
           );
           const key = d.toISO();
+          if (!key) {
+            continue;
+          }
 
           // If we have availability, don't watch just immediately output
           if (res && res.parkResponse.available) {
