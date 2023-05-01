@@ -12,13 +12,17 @@ to make your own Discord App in the developer portal,
 and then pass your own bot tokens into `.env`
 along with a `prefix` (I use `!mouse`)
 
-See the `env.default` file for the expected format.
-
-You will also need to set the bot up in the Discord Developer Portal. The bot
-needs access to at least the "Server Members Intent" and "Presence Intent".  
-See [here](https://github.com/pyamsoft/mousewatch/issues/9) for more details.
+Copy the `env.default` file to `.env` to get started!
 
 # Running
+
+You will need to create a Bot in the
+[Discord Developer Portal](https://discord.com/developers/applications/). At
+a minimum, the bot must have a `TOKEN` and you must set the bot up with the
+`Message Content` intent.
+
+[![Intents](https://raw.githubusercontent.com/pyamsoft/mousewatch/main/art/intents.png)][1]
+
 ```bash
 $ yarn start
 
@@ -32,27 +36,17 @@ $ ./bin/dockerize
 In any channel the bot is present in, type `<PREFIX>`
 followed by the date you wish to check for availability
 
-```
- <In #general>
+[![Example Bot Command](https://raw.githubusercontent.com/pyamsoft/mousewatch/main/art/show.png)][2]
 
- me >  !mouse show 01/24/2023
+Calling the bot with the `show` command and a `<date>` formatted properly will make it show MK
+availability for that given date.
 
- bot > Tue, Jan 24, 2023: Inspire Key reservations are AVAILABLE
-       https://disneyland.disney.go.com/entry-reservation/
+You can call the bot with `watch` and a `<date>` formatted properly and it will constantly watch the
+MK availability calendar for an opening on your given date. Upon seeing availability, the bot will @ reply
+to you in the same channel or DM you originally started the `watch` command in. You can always `stop`
+watching a specific `<date>`, or you can `cancel` all watched dates at any time.
 
- me >  !mouse watch 01/04/2021
-
- bot > :thumbsup: Watching Inspire Key reservations on Sun, Dec 18, 2022
- 
- * A few minutes later... *
- 
- bot > @You Sun, Dec 18, 2022: Inspire Key reservations are AVAILABLE
-       https://disneyland.disney.go.com/entry-reservation/
-       
-       (React to this message with an emoji to stop watching, otherwise I
-        will assume you did not get a reservation spot, and will keep watching.)
-
-```
+For additional help and options, type the `<PREFIX>` and the bot will display all of its commands.
 
 ## Customization
 
@@ -102,3 +96,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
+[1]: https://raw.githubusercontent.com/pyamsoft/mouswatch/main/art/intents.png
+[2]: https://raw.githubusercontent.com/pyamsoft/mouswatch/main/art/show.png
