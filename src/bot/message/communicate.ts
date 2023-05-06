@@ -148,7 +148,7 @@ const postNewMessages = function (
   return Promise.all(work).then((results) => {
     const messagesOnly = [];
     for (const msg of results) {
-      if (!!msg) {
+      if (msg) {
         messagesOnly.push(msg);
       }
     }

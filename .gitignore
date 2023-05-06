@@ -7,3 +7,4 @@ config.json
 .env.*
 
 dist
+yarn-error.log

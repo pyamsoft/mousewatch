@@ -72,6 +72,7 @@ const cancelOldWatches = function (message: Msg, oldCommand: ParkCommand) {
 export const WatchHandler = newMessageHandler(
   TAG,
   function (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     config: BotConfig,
     command: {

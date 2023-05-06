@@ -40,6 +40,7 @@ const NUMBER_MONTHS = 13;
  */
 const AVAILABILITY_BLOCKED = "cms-key-no-availability";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createAvailability(json: any): ParkCalendarResponse | undefined {
   const date = parseDate(json.date);
   if (!date) {
@@ -55,6 +56,7 @@ function createAvailability(json: any): ParkCalendarResponse | undefined {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createAvailabilityList(json: any): ParkCalendarResponse[] {
   const cal = json[0];
   if (!cal) {
@@ -86,7 +88,7 @@ function lookupCalendar(
     DISNEY_HEADERS
   )
     .then(createAvailabilityList)
-    .catch((e: any) => {
+    .catch((e) => {
       logger.error(e, "Error getting DLR availability", {
         magicKey,
         numberMonths,

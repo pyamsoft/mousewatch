@@ -44,7 +44,7 @@ export const ParkCalendarLookupHandler = {
 
           resolve(result);
         })
-        .catch((e: any) => {
+        .catch((e) => {
           logger.error(e, "Unable to lookup magic key calendar: ", {
             magicKey,
             dates,

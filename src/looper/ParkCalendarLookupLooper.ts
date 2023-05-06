@@ -33,7 +33,7 @@ const LOOP_TIME = 30 * 1000;
 let looping = false;
 
 // The timer
-let loopTimer: any = undefined;
+let loopTimer: NodeJS.Timer | undefined = undefined;
 
 const beginLooping = function (command: () => void) {
   stopLooping();

@@ -22,6 +22,7 @@ export interface ParkCalendarResponse {
   /**
    * Raw JSON
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   json: any;
 
   /**

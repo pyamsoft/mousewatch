@@ -33,6 +33,7 @@ const logger = newLogger(TAG);
 export const StopHandler = newMessageHandler(
   TAG,
   function (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     config: BotConfig,
     command: {

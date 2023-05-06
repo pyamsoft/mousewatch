@@ -17,10 +17,10 @@
 const isDebug = process.env.BOT_ENV !== "production";
 
 export interface Logger {
-  print: (...args: any) => void;
-  log: (...args: any) => void;
-  warn: (...args: any) => void;
-  error: (...args: any) => void;
+  print: (...args: unknown[]) => void;
+  log: (...args: unknown[]) => void;
+  warn: (...args: unknown[]) => void;
+  error: (...args: unknown[]) => void;
 }
 
 const logTag = function (prefix: string): string {
@@ -30,23 +30,23 @@ const logTag = function (prefix: string): string {
 export const newLogger = function (prefix: string): Logger {
   const tag = prefix ? logTag(prefix) : "";
   return {
-    print: function print(...args: any) {
+    print: function print(...args: unknown[]) {
       console.log(tag, ...args);
     },
 
-    log: function log(...args: any) {
+    log: function log(...args: unknown[]) {
       if (isDebug) {
         this.print(...args);
       }
     },
 
-    warn: function warn(...args: any) {
+    warn: function warn(...args: unknown[]) {
       if (isDebug) {
         console.warn(tag, ...args);
       }
     },
 
-    error: function error(e, ...args: any) {
+    error: function error(e, ...args: unknown[]) {
       if (isDebug) {
         console.error(tag, e, ...args);
       }

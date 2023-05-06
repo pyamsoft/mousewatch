@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  MessageReaction,
-  PartialMessageReaction,
-  PartialUser,
-  User,
-} from "discord.js";
+import { MessageReaction, PartialMessageReaction } from "discord.js";
 import { newLogger } from "../bot/logger";
 import { newReactionHandler } from "../bot/message/MessageHandler";
 import { reactionChannelFromMessage } from "../bot/message/Reaction";
@@ -35,11 +30,10 @@ export const ReactionStopWatchHandler = newReactionHandler(
   TAG,
 
   function (
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Unused but needed for function signature
     config: BotConfig,
-    reaction: MessageReaction | PartialMessageReaction,
-    // @ts-ignore
-    user: User | PartialUser
+    reaction: MessageReaction | PartialMessageReaction
   ) {
     const { message, emoji } = reaction;
     const targetMessageId = message.id;

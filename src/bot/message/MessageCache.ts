@@ -125,7 +125,7 @@ export const createMessageCache = function (
       }
 
       // We know this is truthy because of above
-      const writeable = cache[messageId]!;
+      const writeable = cache[messageId] as KeyedObject<CachedMsg>;
 
       writeable[key] = {
         msg: message,
