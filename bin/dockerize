@@ -6,4 +6,10 @@ if command -v podman > /dev/null; then
 fi
 
 # shellcheck disable=SC2086
-exec ${_cmd} build . -t pyamsoft/mousewatch -f ./Dockerfile
+exec ${_cmd} build . \
+  -t pyamsoft/mousewatch \
+  -f ./Dockerfile \
+  --rm \
+  --layers \
+  --force-rm \
+  "$@"
