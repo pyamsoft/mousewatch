@@ -30,7 +30,7 @@ const fireHealthCheck = function (url: string) {
 };
 
 export const registerPeriodicHealthCheck = function (url: string) {
-  let timer: NodeJS.Timer | undefined = undefined;
+  let timer: NodeJS.Timeout | undefined = undefined;
 
   if (url) {
     timer = setInterval(() => {
