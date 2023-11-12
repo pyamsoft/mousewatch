@@ -751,14 +751,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.5.0":
-  version: 1.5.0
-  resolution: "axios@npm:1.5.0"
+"axios@npm:1.6.0":
+  version: 1.6.0
+  resolution: "axios@npm:1.6.0"
   dependencies:
     follow-redirects: "npm:^1.15.0"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: a3e11e53ff10fa02defb17c82672599a5ef31f8a6f2b0ea1564a61271226a924baef3a899a03c6850bddb0e9a614acdf615e07b30f382403b5e1fc7ec2eef464
+  checksum: 2879e17b96cbca7e2096d231a44e2d0f03e657d79f8928ea38ec5fbaf5a5b7bf952d580cdb58a66ba328c26eb3528b89d5a32da57cc5cf89813786c044f7e9d6
   languageName: node
   linkType: hard
 
@@ -2566,7 +2566,7 @@ __metadata:
     "@types/uuid": "npm:9.0.2"
     "@typescript-eslint/eslint-plugin": "npm:6.5.0"
     "@typescript-eslint/parser": "npm:6.5.0"
-    axios: "npm:1.5.0"
+    axios: "npm:1.6.0"
     discord.js: "npm:14.13.0"
     dotenv: "npm:16.3.1"
     eslint: "npm:8.48.0"
