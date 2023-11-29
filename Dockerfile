@@ -7,6 +7,7 @@ RUN umask 0022
 COPY package.json ./
 COPY tsconfig.json ./
 COPY yarn.lock ./
+COPY .yarnrc.yml ./
 COPY .eslintrc.cjs ./
 COPY .env.prod ./.env
 COPY src ./src
