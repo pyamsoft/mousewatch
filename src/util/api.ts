@@ -16,9 +16,9 @@
 
 import axios, { AxiosResponse, RawAxiosRequestHeaders } from "axios";
 
-export const jsonApi = function <T>(
+export const jsonApi = async function <T>(
   url: string,
-  headers?: RawAxiosRequestHeaders
+  headers?: RawAxiosRequestHeaders,
 ): Promise<T> {
   return axios({
     method: "GET",

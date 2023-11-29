@@ -41,7 +41,7 @@ export interface CommunicationMessage {
 }
 
 export const createCommunicationMessage = function (
-  message: string
+  message: string,
 ): CommunicationMessage {
   return {
     objectType: "CommunicationMessage",
@@ -50,7 +50,7 @@ export const createCommunicationMessage = function (
 };
 
 export const createCommunicationResult = function <T>(
-  data: T
+  data: T,
 ): CommunicationResult<T> {
   return {
     objectType: "CommunicationResult",
@@ -63,7 +63,7 @@ const deleteOldMessages = function (
   keys: string[],
   env: {
     cache: MessageCache;
-  }
+  },
 ): Promise<void | void[]> {
   const { cache } = env;
   const allOldData = cache.getAll(receivedMessageId);
@@ -116,14 +116,14 @@ const deleteOldMessages = function (
   return Promise.all(work);
 };
 
-const postNewMessages = function (
+const postNewMessages = async function (
   messageId: string,
   channel: SendChannel,
   keys: string[],
   messages: KeyedObject<string>,
   env: {
     cache: MessageCache;
-  }
+  },
 ): Promise<Msg[]> {
   const work = [];
   for (const key of keys) {
@@ -137,7 +137,7 @@ const postNewMessages = function (
           ...env,
           cacheKey: key,
           cacheResult: true,
-        }
+        },
       );
 
       // Add to the list of jobs we are waiting for
@@ -166,7 +166,7 @@ const editExistingMessage = function (
     cacheKey: string;
     cache: MessageCache;
     cacheResult: boolean;
-  }
+  },
 ): Promise<Msg | undefined> {
   const { cache, cacheKey, cacheResult } = env;
   return new Promise((resolve) => {
@@ -207,7 +207,7 @@ const sendNewMessageToChannel = function (
     cacheKey: string;
     cache: MessageCache;
     cacheResult: boolean;
-  }
+  },
 ): Promise<Msg | undefined> {
   const { cache, cacheKey, cacheResult } = env;
   return new Promise((resolve) => {
@@ -249,7 +249,7 @@ const postMessageToPublicChannel = function (
     cacheKey: string;
     cache: MessageCache;
     cacheResult: boolean;
-  }
+  },
 ): Promise<Msg | undefined> {
   const { cache, cacheKey } = env;
   const oldMessage =
@@ -265,25 +265,25 @@ const postMessageToPublicChannel = function (
       editor,
       oldMessage,
       messageText,
-      env
+      env,
     );
   } else {
     return sendNewMessageToChannel(
       receivedMessageId,
       channel,
       messageText,
-      env
+      env,
     );
   }
 };
 
-export const sendMessage = function (
+export const sendMessage = async function (
   receivedMessageId: string,
   channel: SendChannel,
   content: CommunicationMessage | CommunicationResult<KeyedObject<string>>,
   env: {
     cache: MessageCache;
-  }
+  },
 ): Promise<Msg[]> {
   if (content.objectType === "CommunicationMessage") {
     // Plain text message
@@ -295,7 +295,7 @@ export const sendMessage = function (
         ...env,
         cacheKey: GLOBAL_CACHE_KEY,
         cacheResult: true,
-      }
+      },
     ).then((msg) => {
       if (msg) {
         return ensureArray(msg);
@@ -308,7 +308,7 @@ export const sendMessage = function (
     // Delete any old messages first
     const keys = Object.keys(data);
     return deleteOldMessages(receivedMessageId, keys, env).then(() =>
-      postNewMessages(receivedMessageId, channel, keys, data, env)
+      postNewMessages(receivedMessageId, channel, keys, data, env),
     );
   }
 };

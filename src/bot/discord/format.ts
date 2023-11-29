@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-export const code = function (message: string): string {
-  return `\`${message}\``;
-};
-
 export const codeBlock = function (message: string): string {
   return `\`\`\`${message}\`\`\``;
 };

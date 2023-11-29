@@ -20,10 +20,8 @@ import {
   messageHandlerHelpText,
   MessageHandlerOutput,
 } from "../bot/message/MessageHandler";
-import { Msg } from "../bot/message/Msg";
 import { BotConfig } from "../config";
 import { parseDate } from "../looper/DateParser";
-import { WatchAlertMessageCache } from "../looper/WatchAlertMessageCache";
 import { MagicKeyType } from "./model/MagicKeyType";
 import {
   outputDateErrorText,
@@ -53,7 +51,7 @@ export interface ParkCommand {
 const stringContentToArray = function (
   config: BotConfig,
   sliceOut: number,
-  content: string
+  content: string,
 ): ParkCommand {
   const { prefix } = config;
   // This is just the prefix
@@ -117,12 +115,12 @@ const stringContentToArray = function (
 
 export const stringContentToParkCommand = function (
   config: BotConfig,
-  content: string
+  content: string,
 ): ParkCommand {
   const { isHelpCommand, type, dates, magicKey } = stringContentToArray(
     config,
     0,
-    content
+    content,
   );
 
   return {
@@ -165,10 +163,4 @@ export const parseCommandDates = function (command: ParkCommand): {
   }
 
   return { dateList, error: undefined };
-};
-
-export const clearWatchOnReaction = function (message: Msg): boolean {
-  const cachedAlert = WatchAlertMessageCache.getCachedAlert(message.id);
-  logger.log("Cached Alert: ", cachedAlert);
-  return !!cachedAlert;
 };

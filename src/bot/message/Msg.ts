@@ -56,7 +56,7 @@ export const logMsg = function (m: Msg): LoggableMsg {
 };
 
 export const msgFromMessage = function (
-  message: Message | PartialMessage
+  message: Message | PartialMessage,
 ): Msg {
   return {
     id: message.id,
@@ -68,10 +68,10 @@ export const msgFromMessage = function (
 };
 
 export const editorFromMessage = function (
-  message: Message | PartialMessage
+  message: Message | PartialMessage,
 ): MessageEditor {
   return {
-    edit: function (newMessageText: string) {
+    edit: async function (newMessageText: string) {
       return (message as Message)
         .edit(newMessageText)
         .then((msg) => msgFromMessage(msg));
@@ -80,10 +80,10 @@ export const editorFromMessage = function (
 };
 
 export const removerFromMessage = function (
-  message: Message | PartialMessage
+  message: Message | PartialMessage,
 ): MessageRemover {
   return {
-    remove: function () {
+    remove: async function () {
       return (message as Message).delete().then((msg) => msg.id);
     },
   };
@@ -94,10 +94,10 @@ export const messageFromMsg = function (message: Msg): Message {
 };
 
 export const sendChannelFromMessage = function (
-  message: Message | PartialMessage
+  message: Message | PartialMessage,
 ): SendChannel {
   return {
-    send: function (messageText: string) {
+    send: async function (messageText: string) {
       const channel = (message as Message).channel;
       // Typescript is lame but I know this field exists on a message channel
       return (channel as unknown as PartialTextBasedChannelFields)

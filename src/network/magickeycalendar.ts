@@ -40,13 +40,17 @@ const NUMBER_MONTHS = 13;
  */
 const AVAILABILITY_BLOCKED = "cms-key-no-availability";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function createAvailability(json: any): ParkCalendarResponse | undefined {
+const createAvailability = function (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  json: any,
+): ParkCalendarResponse | undefined {
   const date = parseDate(json.date);
   if (!date) {
     return undefined;
   }
 
+  // Hooray anytype!
+  // noinspection JSUnresolvedReference
   return {
     objectType: "ParkCalendarResponse",
     json,
@@ -54,10 +58,10 @@ function createAvailability(json: any): ParkCalendarResponse | undefined {
     available:
       !!json.availability && json.availability !== AVAILABILITY_BLOCKED,
   };
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function createAvailabilityList(json: any): ParkCalendarResponse[] {
+const createAvailabilityList = function (json: any): ParkCalendarResponse[] {
   const cal = json[0];
   if (!cal) {
     logger.warn("Missing cal object in json list response: ", json);
@@ -71,11 +75,11 @@ function createAvailabilityList(json: any): ParkCalendarResponse[] {
   return list
     .map(createAvailability)
     .filter((a: ParkCalendarResponse | undefined) => !!a);
-}
+};
 
-function lookupCalendar(
+const lookupCalendar = async function (
   magicKey: MagicKeyType,
-  numberMonths: number
+  numberMonths: number,
 ): Promise<ParkCalendarResponse[]> {
   logger.log("Hit upstream calendar endpoint", {
     magicKey,
@@ -85,7 +89,7 @@ function lookupCalendar(
   // This endpoint may return different data that the "global" one
   return jsonApi(
     `https://disneyland.disney.go.com/passes/blockout-dates/api/get-availability/?product-types=${magicKey}&destinationId=DLR&numMonths=${numberMonths}`,
-    DISNEY_HEADERS
+    DISNEY_HEADERS,
   )
     .then(createAvailabilityList)
     .catch((e) => {
@@ -95,7 +99,7 @@ function lookupCalendar(
       });
       return [];
     });
-}
+};
 
 export const MagicKeyCalendarApi = {
   getCalendar: function (magicKey: MagicKeyType) {

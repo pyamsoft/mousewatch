@@ -46,7 +46,7 @@ export interface DiscordBot {
 
   addHandler: (
     type: MessageEventType,
-    handler: MessageHandler | ReactionHandler
+    handler: MessageHandler | ReactionHandler,
   ) => string;
 
   removeHandler: (id: string) => boolean;
@@ -55,6 +55,8 @@ export interface DiscordBot {
 }
 
 export const initializeBot = function (config: BotConfig): DiscordBot {
+  // This does exist in the source?
+  // noinspection JSUnresolvedReference
   const client = new Client({
     intents: [
       GatewayIntentBits.Guilds,
@@ -88,7 +90,7 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
 
   const messageUpdateHandler = function (
     oldMessage: Message | PartialMessage,
-    newMessage: Message | PartialMessage
+    newMessage: Message | PartialMessage,
   ) {
     handleBotMessage(config, MessageEventTypes.UPDATE, newMessage, oldMessage, {
       handlers: handlerList,
@@ -98,7 +100,7 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
 
   const messageReactionHandler = function (
     reaction: MessageReaction | PartialMessageReaction,
-    user: User | PartialUser
+    user: User | PartialUser,
   ) {
     handleBotMessageReaction(
       config,
@@ -108,20 +110,20 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
       {
         handlers: handlerList,
         cache: messageCache,
-      }
+      },
     );
   };
 
   return Object.freeze({
     addHandler: function (
       type: MessageEventType,
-      handler: MessageHandler | ReactionHandler
+      handler: MessageHandler | ReactionHandler,
     ) {
       const id = generateRandomId();
       handlers[id] = { id, handler, type };
       logger.log("Add new handler: ", handlers[id]);
       handlerList = Object.values(handlers).filter(
-        (h) => !!h
+        (h) => !!h,
       ) as KeyedMessageHandler[];
       return id;
     },
@@ -130,7 +132,7 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
         logger.log("Removed handler: ", handlers[id]);
         handlers[id] = undefined;
         handlerList = Object.values(handlers).filter(
-          (h) => !!h
+          (h) => !!h,
         ) as KeyedMessageHandler[];
         return true;
       } else {
@@ -176,7 +178,7 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
         onStop();
       });
     },
-    login: function () {
+    login: async function () {
       const { token } = config;
       return client
         .login(token)
