@@ -15,17 +15,21 @@
  */
 
 import axios from "axios";
+import { newLogger } from "./bot/logger";
+
+const logger = newLogger("HealthCheck");
 
 const fireHealthCheck = function (url: string) {
+  logger.log(`Attempt healthcheck: ${url}`);
   axios({
     method: "GET",
     url,
   })
     .then(() => {
-      // Ignore
+      logger.log(`Healthcheck success!`);
     })
-    .catch(() => {
-      // Ignore
+    .catch((e) => {
+      logger.error(`Healthcheck failed!`, e);
     });
 };
 
