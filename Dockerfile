@@ -12,6 +12,9 @@ COPY .eslintrc.cjs ./
 COPY .env.prod ./.env
 COPY src ./src
 
+# Yarn build file
+COPY .yarn/releases/yarn-*.cjs ./.yarn/releases/
+
 # Enable corepack
 RUN chmod 644 .env && corepack enable
 

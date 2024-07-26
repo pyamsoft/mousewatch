@@ -18,19 +18,19 @@ import { Msg } from "./Msg";
 import { BotConfig } from "../../config";
 import { Channel, ChannelType } from "discord.js";
 
-export const validateMessageHasId = function (message: Msg): boolean {
+const validateMessageHasId = function (message: Msg): boolean {
   return !!message.id;
 };
 
-export const validateMessageIsNotFromBot = function (message: Msg): boolean {
+const validateMessageIsNotFromBot = function (message: Msg): boolean {
   return !message.author.bot;
 };
 
-export const validateMessageHasChannel = function (message: Msg): boolean {
+const validateMessageHasChannel = function (message: Msg): boolean {
   return !!message.channel;
 };
 
-export const validateMessageIsTextChannel = function (message: Msg): boolean {
+const validateMessageIsTextChannel = function (message: Msg): boolean {
   const type = message.channel.type;
 
   // This does exist in the source?
@@ -38,20 +38,20 @@ export const validateMessageIsTextChannel = function (message: Msg): boolean {
   return type === ChannelType.GuildText || type === ChannelType.DM;
 };
 
-export const validateMessageIsSpecificChannel = function (
-  config: BotConfig,
-  message: Msg,
+const validateMessageIsTargetedChannel = function (
+    config: BotConfig,
+    message: Msg,
 ): boolean {
-  if (config.specificChannel) {
+  if (config.targetedChannels && config.targetedChannels.length > 0) {
     // I know this works, discord is dumb
     const ch = message.channel as unknown as Channel;
-    return ch.id === config.specificChannel;
+    return config.targetedChannels.some((c) => ch.id === c);
   } else {
     return true;
   }
 };
 
-export const validateMessageIsWatched = function (
+const validateMessageIsWatched = function (
   config: BotConfig,
   message: Msg,
 ): boolean {
@@ -85,7 +85,7 @@ export const validateMessage = function (
   // This does exist in the source?
   // noinspection JSUnresolvedReference
   if (type === ChannelType.GuildText) {
-    if (!validateMessageIsSpecificChannel(config, message)) {
+    if (!validateMessageIsTargetedChannel(config, message)) {
       return false;
     }
   }
