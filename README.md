@@ -24,7 +24,8 @@ a minimum, the bot must have a `TOKEN` and you must set the bot up with the
 [![Intents](https://raw.githubusercontent.com/pyamsoft/mousewatch/main/art/intents.png)][1]
 
 ```bash
-$ yarn start
+# You'll need pnpm installed, either via a local corepack directory or globally
+$ pnpm install && pnpm run start
 
 OR
 
