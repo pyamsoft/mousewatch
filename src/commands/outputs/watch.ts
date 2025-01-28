@@ -20,11 +20,11 @@ import { magicKeyName, MagicKeyType } from "../model/MagicKeyType";
 
 export const outputWatchStarted = function (
   magicKey: MagicKeyType,
-  date: DateTime
+  date: DateTime,
 ): string {
   return `:thumbsup: Watching ${italic(
-    magicKeyName(magicKey)
+    magicKeyName(magicKey),
   )} reservations on ${bold(
-    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY),
   )}`;
 };

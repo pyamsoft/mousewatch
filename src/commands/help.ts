@@ -35,7 +35,7 @@ export const HelpHandler = newMessageHandler(
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
       message: Msg;
-    }
+    },
   ) {
     // Only handle help
     const { currentCommand } = command;
@@ -45,5 +45,5 @@ export const HelpHandler = newMessageHandler(
 
     logger.log("Handle help message", currentCommand);
     return Promise.resolve(messageHandlerHelpText(outputHelpText(config)));
-  }
+  },
 );

@@ -25,7 +25,6 @@ import {
 import { stringContentToParkCommand } from "../../commands/command";
 import { BotConfig } from "../../config";
 import { newLogger } from "../logger";
-import { KeyedObject } from "../model/KeyedObject";
 import { MessageEventType, MessageEventTypes } from "../model/MessageEventType";
 import {
   createCommunicationMessage,
@@ -33,12 +32,7 @@ import {
   sendMessage,
 } from "./communicate";
 import { MessageCache } from "./MessageCache";
-import {
-  KeyedMessageHandler,
-  MessageHandler,
-  MessageHandlerOutput,
-  ReactionHandler,
-} from "./MessageHandler";
+import { KeyedMessageHandler, MessageHandlerOutput } from "./MessageHandler";
 import {
   logMsg,
   Msg,
@@ -51,13 +45,13 @@ import { validateMessage } from "./validate";
 const logger = newLogger("messages");
 
 const sendMessageAfterParsing = function (
-  results: MessageHandlerOutput[],
+  results: ReadonlyArray<MessageHandlerOutput>,
   message: Msg,
   sendChannel: SendChannel,
   env: {
-    handlers: KeyedMessageHandler[];
+    handlers: ReadonlyArray<KeyedMessageHandler>;
     cache: MessageCache;
-  }
+  },
 ) {
   // None of our handlers have done this, if we continue, behavior is undefined
   if (results.length <= 0) {
@@ -65,7 +59,7 @@ const sendMessageAfterParsing = function (
     return;
   }
 
-  const combinedOutputs: KeyedObject<string> = {};
+  const combinedOutputs: Record<string, string> = {};
   for (const res of results) {
     // Any help outputs immediately stop the message sending
     if (!!res.helpOutput && !!res.helpOutput.trim()) {
@@ -73,7 +67,7 @@ const sendMessageAfterParsing = function (
         message.id,
         sendChannel,
         createCommunicationMessage(res.helpOutput),
-        env
+        env,
       ).then((responded) => {
         logger.log("Responded with help text", !!responded);
       });
@@ -90,12 +84,12 @@ const sendMessageAfterParsing = function (
     message.id,
     sendChannel,
     createCommunicationResult(combinedOutputs),
-    env
+    env,
   ).then((responded) => {
     logger.log(
       "Responded with combined output for keys: ",
       Object.keys(combinedOutputs),
-      !!responded
+      !!responded,
     );
   });
 };
@@ -106,9 +100,9 @@ export const handleBotMessage = function (
   message: Message | PartialMessage,
   optionalOldMessage: Message | PartialMessage | undefined,
   env: {
-    handlers: KeyedMessageHandler[];
+    handlers: ReadonlyArray<KeyedMessageHandler>;
     cache: MessageCache;
-  }
+  },
 ) {
   // Reactions are handled by a different function
   if (eventType === MessageEventTypes.REACTION) {
@@ -144,8 +138,7 @@ export const handleBotMessage = function (
     if (type === eventType) {
       let output: Promise<MessageHandlerOutput> | undefined = undefined;
       if (handler.objectType === "MessageHandler") {
-        const messageHandler = handler as MessageHandler;
-        output = messageHandler.handle(config, {
+        output = handler.handle(config, {
           currentCommand: current,
           oldCommand: old,
           message: msg,
@@ -153,7 +146,7 @@ export const handleBotMessage = function (
       } else {
         logger.warn(
           "Handler type cannot handle bot messages: ",
-          handler.objectType
+          handler.objectType,
         );
         return;
       }
@@ -170,7 +163,7 @@ export const handleBotMessage = function (
   }
 
   Promise.all(work).then((outputs) =>
-    sendMessageAfterParsing(outputs, msg, sendChannel, env)
+    sendMessageAfterParsing(outputs, msg, sendChannel, env),
   );
 };
 
@@ -180,9 +173,9 @@ export const handleBotMessageReaction = function (
   reaction: MessageReaction | PartialMessageReaction,
   user: User | PartialUser,
   env: {
-    handlers: KeyedMessageHandler[];
+    handlers: ReadonlyArray<KeyedMessageHandler>;
     cache: MessageCache;
-  }
+  },
 ) {
   // Messages are handled by a different function
   if (eventType !== MessageEventTypes.REACTION) {
@@ -199,12 +192,11 @@ export const handleBotMessageReaction = function (
     const { handler, type } = item;
     if (type === eventType) {
       if (handler.objectType === "ReactionHandler") {
-        const reactionHandler = handler as ReactionHandler;
-        reactionHandler.handle(config, reaction, user);
+        handler.handle(config, reaction, user);
       } else {
         logger.warn(
           "Handler type cannot handle bot reactions: ",
-          handler.objectType
+          handler.objectType,
         );
         return;
       }

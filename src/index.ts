@@ -35,61 +35,61 @@ const main = function () {
 
   const createHelpHandler = bot.addHandler(
     MessageEventTypes.CREATE,
-    HelpHandler
+    HelpHandler,
   );
   const updateHelpHandler = bot.addHandler(
     MessageEventTypes.UPDATE,
-    HelpHandler
+    HelpHandler,
   );
 
   const createStatusHandler = bot.addHandler(
     MessageEventTypes.CREATE,
-    StatusHandler
+    StatusHandler,
   );
   const updateStatusHandler = bot.addHandler(
     MessageEventTypes.UPDATE,
-    StatusHandler
+    StatusHandler,
   );
 
   const createShowHandler = bot.addHandler(
     MessageEventTypes.CREATE,
-    ShowHandler
+    ShowHandler,
   );
   const updateShowHandler = bot.addHandler(
     MessageEventTypes.UPDATE,
-    ShowHandler
+    ShowHandler,
   );
 
   const createWatchHandler = bot.addHandler(
     MessageEventTypes.CREATE,
-    WatchHandler
+    WatchHandler,
   );
   const updateWatchHandler = bot.addHandler(
     MessageEventTypes.UPDATE,
-    WatchHandler
+    WatchHandler,
   );
 
   const createStopHandler = bot.addHandler(
     MessageEventTypes.CREATE,
-    StopHandler
+    StopHandler,
   );
   const updateStopHandler = bot.addHandler(
     MessageEventTypes.UPDATE,
-    StopHandler
+    StopHandler,
   );
 
   const createCancelHandler = bot.addHandler(
     MessageEventTypes.CREATE,
-    CancelHandler
+    CancelHandler,
   );
   const updateCancelHandler = bot.addHandler(
     MessageEventTypes.UPDATE,
-    CancelHandler
+    CancelHandler,
   );
 
   const stopWatchReactionHandler = bot.addHandler(
     MessageEventTypes.REACTION,
-    ReactionStopWatchHandler
+    ReactionStopWatchHandler,
   );
 
   const health = registerPeriodicHealthCheck(config.healthCheckUrl);

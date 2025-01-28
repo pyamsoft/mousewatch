@@ -28,8 +28,8 @@ const logger = newLogger("ParkCalendarLookupHandler");
 export const ParkCalendarLookupHandler = {
   lookup: function (
     magicKey: MagicKeyType,
-    dates: DateTime[]
-  ): Promise<LookupResult[]> {
+    dates: ReadonlyArray<DateTime>,
+  ): Promise<ReadonlyArray<LookupResult>> {
     return new Promise((resolve, reject) => {
       const result: LookupResult[] = [];
       MagicKeyCalendarApi.getCalendar(magicKey)

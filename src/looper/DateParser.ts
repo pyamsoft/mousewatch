@@ -60,16 +60,20 @@ const parseRawDate = function (content: string): DateTime | undefined {
   }
 };
 
+export const cleanDate = function (date: DateTime): DateTime {
+  return date.set({
+    hour: 0,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+};
+
 export const parseDate = function (content: string): DateTime | undefined {
   const date = parseRawDate(content);
   if (!date) {
-    return date;
-  } else {
-    return date.set({
-      hour: 0,
-      minute: 0,
-      second: 0,
-      millisecond: 0,
-    });
+    return undefined;
   }
+
+  return cleanDate(date);
 };

@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-import { DateTime } from "luxon";
-import { newLogger } from "../bot/logger";
-import {
-  messageHandlerHelpText,
-  MessageHandlerOutput,
-} from "../bot/message/MessageHandler";
-import { BotConfig } from "../config";
-import { parseDate } from "../looper/DateParser";
-import { MagicKeyType } from "./model/MagicKeyType";
-import {
-  outputDateErrorText,
-  outputDateMissingText,
-} from "./outputs/dateerror";
+import {DateTime} from "luxon";
+import {newLogger} from "../bot/logger";
+import {messageHandlerHelpText, MessageHandlerOutput,} from "../bot/message/MessageHandler";
+import {BotConfig} from "../config";
+import {cleanDate, parseDate} from "../looper/DateParser";
+import {MagicKeyType} from "./model/MagicKeyType";
+import {outputDateErrorText, outputDateMissingText,} from "./outputs/dateerror";
 
 const logger = newLogger("Commands");
 
@@ -45,7 +39,7 @@ export interface ParkCommand {
   type: ParkCommandType;
 
   magicKey: MagicKeyType;
-  dates: string[];
+  dates: ReadonlyArray<string>;
 }
 
 const stringContentToArray = function (
@@ -134,15 +128,33 @@ export const stringContentToParkCommand = function (
   };
 };
 
+const specialParseDate = function (dateString: string): DateTime | undefined {
+  const specialCaseString = dateString.toLowerCase().trim();
+  let date: DateTime | undefined;
+  if (specialCaseString === "tomorrow") {
+    date = DateTime.now().plus({ day: 1 });
+  } else if (specialCaseString === "next-week") {
+    date = DateTime.now().plus({ week: 1 });
+  } else if (specialCaseString === "next-month") {
+    date = DateTime.now().plus({ month: 1 });
+  }
+
+  if (date) {
+    return cleanDate(date);
+  }
+
+  return parseDate(dateString);
+};
+
 export const parseCommandDates = function (command: ParkCommand): {
-  dateList: DateTime[];
+  dateList: ReadonlyArray<DateTime>;
   error: Promise<MessageHandlerOutput> | undefined;
 } {
   const { dates } = command;
 
   const dateList: DateTime[] = [];
   for (const d of dates) {
-    const parsedDate = parseDate(d);
+    const parsedDate = specialParseDate(d);
     if (parsedDate) {
       dateList.push(parsedDate);
     } else {

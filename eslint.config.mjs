@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 pyamsoft
+ * Copyright 2025 pyamsoft
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,4 +14,18 @@
  * limitations under the License.
  */
 
-export type KeyedObject<T> = { [key: string]: T };
+import tseslint from "typescript-eslint";
+import js from "@eslint/js";
+import globals from "globals";
+
+export default tseslint.config(
+  { ignores: ["dist"] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.node,
+    },
+  },
+);

@@ -25,7 +25,6 @@ import {
   Msg,
   sendChannelFromMessage,
 } from "../bot/message/Msg";
-import { KeyedObject } from "../bot/model/KeyedObject";
 import { BotConfig } from "../config";
 import { ParkCalendarLookupLooper } from "../looper/ParkCalendarLookupLooper";
 import { ParkCalendarLookupHandler } from "../looper/ParkCalendarLooupHandler";
@@ -79,7 +78,7 @@ export const WatchHandler = newMessageHandler(
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
       message: Msg;
-    }
+    },
   ) {
     const { currentCommand, oldCommand, message } = command;
     if (
@@ -104,12 +103,12 @@ export const WatchHandler = newMessageHandler(
 
     return ParkCalendarLookupHandler.lookup(magicKey, dateList).then(
       (results) => {
-        const messages: KeyedObject<string> = {};
+        const messages: Record<string, string> = {};
         const notFoundDates: DateTime[] = [];
 
         for (const d of dateList) {
           const res = results.find(
-            (r) => d.valueOf() === r.targetDate.valueOf()
+            (r) => d.valueOf() === r.targetDate.valueOf(),
           );
           const key = d.toISO();
           if (!key) {
@@ -128,7 +127,7 @@ export const WatchHandler = newMessageHandler(
                 message,
                 magicKey,
                 targetDate: d,
-              })
+              }),
             );
           }
         }
@@ -138,9 +137,9 @@ export const WatchHandler = newMessageHandler(
         }
 
         return messageHandlerOutput(messages);
-      }
+      },
     );
-  }
+  },
 );
 
 const alreadySeenResult = function (r1: WatchResult, r2: WatchResult): boolean {
@@ -184,7 +183,7 @@ const sideEffectWatchLoop = function (message: Msg) {
 
       // If we have already sent this message before, do not send it again
       const alreadySent = avoidMassSpamBug.find((s) =>
-        alreadySeenResult(s, res)
+        alreadySeenResult(s, res),
       );
       if (alreadySent) {
         logger.warn("[BUG]: We have already sent this Result!", res);

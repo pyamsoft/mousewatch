@@ -33,7 +33,7 @@ export const ReactionStopWatchHandler = newReactionHandler(
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore Unused but needed for function signature
     config: BotConfig,
-    reaction: MessageReaction | PartialMessageReaction
+    reaction: MessageReaction | PartialMessageReaction,
   ) {
     const { message, emoji } = reaction;
     const targetMessageId = message.id;
@@ -44,7 +44,7 @@ export const ReactionStopWatchHandler = newReactionHandler(
     logger.log(
       "Reaction captured for message: ",
       targetMessageId,
-      emojiContent
+      emojiContent,
     );
 
     // See if we have sent the alert message
@@ -52,7 +52,7 @@ export const ReactionStopWatchHandler = newReactionHandler(
     if (!cachedAlert) {
       logger.warn(
         "Can't handle reaction for a non-alert message",
-        targetMessageId
+        targetMessageId,
       );
       return;
     }
@@ -65,7 +65,7 @@ export const ReactionStopWatchHandler = newReactionHandler(
       ParkWatchCache.removeWatch(
         cachedAlert.userId,
         cachedAlert.magicKey,
-        cachedAlert.targetDate
+        cachedAlert.targetDate,
       )
     ) {
       logger.log("Reaction clears watch", {
@@ -89,10 +89,10 @@ export const ReactionStopWatchHandler = newReactionHandler(
             logger.error(
               e,
               "Error closing the loop with a reaction",
-              emojiContent
+              emojiContent,
             );
           });
       }
     }
-  }
+  },
 );

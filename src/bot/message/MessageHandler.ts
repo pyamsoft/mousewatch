@@ -22,7 +22,6 @@ import {
 } from "discord.js";
 import { ParkCommand } from "../../commands/command";
 import { BotConfig } from "../../config";
-import { KeyedObject } from "../model/KeyedObject";
 import { MessageEventType } from "../model/MessageEventType";
 import { Msg } from "./Msg";
 
@@ -35,11 +34,11 @@ export interface KeyedMessageHandler {
 export interface MessageHandlerOutput {
   objectType: "MessageHandlerOutput";
   helpOutput: string;
-  messages: KeyedObject<string>;
+  messages: Record<string, string>;
 }
 
 export const messageHandlerOutput = function (
-  messages: KeyedObject<string>
+  messages: Record<string, string>,
 ): MessageHandlerOutput {
   return {
     objectType: "MessageHandlerOutput",
@@ -49,7 +48,7 @@ export const messageHandlerOutput = function (
 };
 
 export const messageHandlerHelpText = function (
-  message: string
+  message: string,
 ): MessageHandlerOutput {
   return {
     objectType: "MessageHandlerOutput",
@@ -69,7 +68,7 @@ export interface MessageHandler {
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
       message: Msg;
-    }
+    },
   ) => Promise<MessageHandlerOutput> | undefined;
 }
 
@@ -81,8 +80,8 @@ export const newMessageHandler = function (
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
       message: Msg;
-    }
-  ) => Promise<MessageHandlerOutput> | undefined
+    },
+  ) => Promise<MessageHandlerOutput> | undefined,
 ): MessageHandler {
   return {
     objectType: "MessageHandler",
@@ -99,7 +98,7 @@ export interface ReactionHandler {
   handle: (
     config: BotConfig,
     reaction: MessageReaction | PartialMessageReaction,
-    user: User | PartialUser
+    user: User | PartialUser,
   ) => void;
 }
 
@@ -108,8 +107,8 @@ export const newReactionHandler = function (
   handle: (
     config: BotConfig,
     reaction: MessageReaction | PartialMessageReaction,
-    user: User | PartialUser
-  ) => void
+    user: User | PartialUser,
+  ) => void,
 ): ReactionHandler {
   return {
     objectType: "ReactionHandler",

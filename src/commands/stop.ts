@@ -20,7 +20,6 @@ import {
   newMessageHandler,
 } from "../bot/message/MessageHandler";
 import { Msg } from "../bot/message/Msg";
-import { KeyedObject } from "../bot/model/KeyedObject";
 import { BotConfig } from "../config";
 import { ParkCalendarLookupLooper } from "../looper/ParkCalendarLookupLooper";
 import { ParkWatchCache } from "../looper/ParkWatchCache";
@@ -40,7 +39,7 @@ export const StopHandler = newMessageHandler(
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
       message: Msg;
-    }
+    },
   ) {
     // Only handle status
     const { currentCommand, message } = command;
@@ -63,7 +62,7 @@ export const StopHandler = newMessageHandler(
       const { author } = message;
       const userId = author.id;
 
-      const outputs: KeyedObject<string> = {};
+      const outputs: Record<string, string> = {};
       for (const d of dateList) {
         const key = d.toISO();
         if (!key) {
@@ -84,5 +83,5 @@ export const StopHandler = newMessageHandler(
 
       resolve(messageHandlerOutput(outputs));
     });
-  }
+  },
 );

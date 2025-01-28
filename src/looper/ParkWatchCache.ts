@@ -23,7 +23,7 @@ const cache = new Set<WatchEntry>();
 const removeWatches = function (
   userId: string,
   magicKey: MagicKeyType,
-  optionalDate: DateTime | undefined
+  optionalDate: DateTime | undefined,
 ): boolean {
   const oldSize = cache.size;
   const deleteMe: WatchEntry[] = [];
@@ -94,7 +94,7 @@ export const ParkWatchCache = {
   removeWatch: function (
     userId: string,
     magicKey: MagicKeyType,
-    date: DateTime
+    date: DateTime,
   ): boolean {
     return removeWatches(userId, magicKey, date);
   },

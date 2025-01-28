@@ -80,7 +80,7 @@ const createAvailabilityList = function (json: any): ParkCalendarResponse[] {
 const lookupCalendar = async function (
   magicKey: MagicKeyType,
   numberMonths: number,
-): Promise<ParkCalendarResponse[]> {
+): Promise<ReadonlyArray<ParkCalendarResponse>> {
   logger.log("Hit upstream calendar endpoint", {
     magicKey,
     numberMonths,

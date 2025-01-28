@@ -53,7 +53,9 @@ const stopLooping = function () {
 };
 
 export const ParkCalendarLookupLooper = {
-  loop: function (onResultsReceived: (results: WatchResult[]) => void) {
+  loop: function (
+    onResultsReceived: (results: ReadonlyArray<WatchResult>) => void,
+  ) {
     if (looping) {
       logger.log("loop() called but already looping");
       return;
@@ -64,7 +66,7 @@ export const ParkCalendarLookupLooper = {
     beginLooping(() => {
       logger.log("Loop run: Get all keys and fetch calendar info");
       const magicKeys = ParkWatchCache.targetCalendars();
-      const jobs: Promise<WatchResult[]>[] = [];
+      const jobs: Promise<ReadonlyArray<WatchResult>>[] = [];
 
       for (const magicKey of magicKeys) {
         const entries = ParkWatchCache.magicKeyWatches(magicKey);
@@ -80,7 +82,7 @@ export const ParkCalendarLookupLooper = {
               const entry = entries.find(
                 (e) =>
                   e.targetDate.valueOf() === res.targetDate.valueOf() &&
-                  e.magicKey === res.magicKey
+                  e.magicKey === res.magicKey,
               );
               if (entry) {
                 results.push(createResultFromEntry(entry, res.parkResponse));
@@ -88,7 +90,7 @@ export const ParkCalendarLookupLooper = {
             }
 
             return results;
-          })
+          }),
         );
       }
 

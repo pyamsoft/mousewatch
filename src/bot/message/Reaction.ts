@@ -24,7 +24,7 @@ export interface ReactionChannel {
 }
 
 export const reactionChannelFromMessage = function (
-  message: Message | PartialMessage
+  message: Message | PartialMessage,
 ): ReactionChannel {
   return {
     react: function (emoji: string) {

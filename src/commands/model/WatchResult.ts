@@ -40,7 +40,7 @@ export interface WatchResult extends BaseResult {
 export const createLookupResult = function (
   magicKey: MagicKeyType,
   date: DateTime,
-  response: ParkCalendarResponse
+  response: ParkCalendarResponse,
 ): LookupResult {
   return {
     objectType: "LookupResult",
@@ -53,7 +53,7 @@ export const createLookupResult = function (
 
 export const createResultFromEntry = function (
   entry: WatchEntry,
-  response: ParkCalendarResponse
+  response: ParkCalendarResponse,
 ): WatchResult {
   return {
     objectType: "WatchResult",

@@ -39,8 +39,8 @@ const validateMessageIsTextChannel = function (message: Msg): boolean {
 };
 
 const validateMessageIsTargetedChannel = function (
-    config: BotConfig,
-    message: Msg,
+  config: BotConfig,
+  message: Msg,
 ): boolean {
   if (config.targetedChannels && config.targetedChannels.length > 0) {
     // I know this works, discord is dumb

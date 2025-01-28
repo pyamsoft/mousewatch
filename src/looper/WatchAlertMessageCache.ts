@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { KeyedObject } from "../bot/model/KeyedObject";
 import { WatchResult } from "../commands/model/WatchResult";
 
-const cache: KeyedObject<WatchResult | undefined> = {};
+const cache: Record<string, WatchResult | undefined> = {};
 
 export const WatchAlertMessageCache = {
   cacheAlert: function (messageId: string, result: WatchResult) {

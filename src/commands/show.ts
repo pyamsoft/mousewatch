@@ -20,7 +20,6 @@ import {
   newMessageHandler,
 } from "../bot/message/MessageHandler";
 import { Msg } from "../bot/message/Msg";
-import { KeyedObject } from "../bot/model/KeyedObject";
 import { BotConfig } from "../config";
 import { ParkCalendarLookupHandler } from "../looper/ParkCalendarLooupHandler";
 import { ParkCommand, ParkCommandType, parseCommandDates } from "./command";
@@ -42,7 +41,7 @@ export const ShowHandler = newMessageHandler(
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
       message: Msg;
-    }
+    },
   ) {
     // Only handle status
     const { currentCommand } = command;
@@ -63,7 +62,7 @@ export const ShowHandler = newMessageHandler(
 
     return ParkCalendarLookupHandler.lookup(magicKey, dateList).then(
       (results) => {
-        const messages: KeyedObject<string> = {};
+        const messages: Record<string, string> = {};
         for (const d of dateList) {
           const res = results.find((r) => d === r.targetDate);
           const key = d.toISO();
@@ -79,7 +78,7 @@ export const ShowHandler = newMessageHandler(
         }
 
         return messageHandlerOutput(messages);
-      }
+      },
     );
-  }
+  },
 );

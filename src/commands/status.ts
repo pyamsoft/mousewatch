@@ -35,7 +35,7 @@ export const StatusHandler = newMessageHandler(
       currentCommand: ParkCommand;
       oldCommand?: ParkCommand;
       message: Msg;
-    }
+    },
   ) {
     // Only handle status
     const { currentCommand } = command;
@@ -48,7 +48,7 @@ export const StatusHandler = newMessageHandler(
 
     logger.log("Handle status message", currentCommand);
     return outputStatusText(config).then((text) =>
-      messageHandlerHelpText(text)
+      messageHandlerHelpText(text),
     );
-  }
+  },
 );

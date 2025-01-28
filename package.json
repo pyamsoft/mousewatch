@@ -1,34 +1,39 @@
 {
   "name": "mousewatch",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "main": "index.js",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "rm -rf dist && yarn lint && tsc",
-    "start": "yarn build && node ./dist/index.js",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "build": "rm -rf dist && $npm_execpath lint && tsc",
+    "start": "$npm_execpath build && node ./dist/index.js",
+    "lint": "eslint --report-unused-disable-directives --max-warnings 0 .",
+    "format": "prettier --write ."
   },
   "engines": {
     "node": ">=20.x"
   },
   "dependencies": {
-    "axios": "1.7.4",
-    "discord.js": "14.15.3",
-    "dotenv": "16.4.5",
-    "luxon": "3.4.4",
-    "uuid": "10.0.0"
+    "axios": "1.7.9",
+    "discord.js": "14.17.3",
+    "dotenv": "16.4.7",
+    "luxon": "3.5.0",
+    "uuid": "11.0.5"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "3.2.0",
+    "@eslint/js": "9.19.0",
     "@types/luxon": "3.4.2",
-    "@types/node": "20.14.12",
+    "@types/node": "22.12.0",
     "@types/uuid": "10.0.0",
-    "@typescript-eslint/eslint-plugin": "7.17.0",
-    "@typescript-eslint/parser": "7.17.0",
-    "eslint": "8.57.0",
-    "npm-check-updates": "16.14.20",
-    "prettier": "3.3.3",
-    "tslib": "2.6.3",
-    "typescript": "5.5.4"
+    "@typescript-eslint/eslint-plugin": "8.22.0",
+    "@typescript-eslint/parser": "8.22.0",
+    "eslint": "9.19.0",
+    "globals": "15.14.0",
+    "npm-check-updates": "17.1.14",
+    "prettier": "3.4.2",
+    "tslib": "2.8.1",
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.22.0"
   },
-  "packageManager": "yarn@4.3.1"
+  "packageManager": "pnpm@9.13.2"
 }

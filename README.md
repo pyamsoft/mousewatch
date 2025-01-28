@@ -75,7 +75,6 @@ it doesn't matter. You must return to that starting page URL and click the butto
 
 happy reserving.
 
-
 ## License
 
 Apache 2

@@ -16,7 +16,6 @@
 
 import { DateTime } from "luxon";
 import { codeBlock } from "../../bot/discord/format";
-import { KeyedObject } from "../../bot/model/KeyedObject";
 import { BotConfig } from "../../config";
 import { ParkWatchCache } from "../../looper/ParkWatchCache";
 import { allMagicKeys, magicKeyName } from "../model/MagicKeyType";
@@ -31,7 +30,7 @@ export const outputStatusText = function (config: BotConfig): Promise<string> {
   const { prefix } = config;
 
   return new Promise((resolve) => {
-    const statusBlocks: KeyedObject<MagicKeyPayload[]> = {};
+    const statusBlocks: Record<string, MagicKeyPayload[]> = {};
     for (const magicKey of allMagicKeys()) {
       const entries = ParkWatchCache.magicKeyWatches(magicKey);
       const keyName = magicKeyName(magicKey);
@@ -41,7 +40,7 @@ export const outputStatusText = function (config: BotConfig): Promise<string> {
         }
 
         const userBlock = statusBlocks[keyName].find(
-          (b) => b.userId === entry.userId
+          (b) => b.userId === entry.userId,
         );
         if (userBlock) {
           userBlock.dates.push(entry.targetDate);
@@ -78,7 +77,7 @@ export const outputStatusText = function (config: BotConfig): Promise<string> {
 COMMAND: ${prefix}
 ===========================
 ${textBlock.trim()}
-`)
+`),
     );
   });
 };

@@ -15,7 +15,6 @@
  */
 
 import { Msg } from "./Msg";
-import { KeyedObject } from "../model/KeyedObject";
 import { newLogger } from "../logger";
 
 const logger = newLogger("MessageCache");
@@ -26,7 +25,7 @@ export interface MessageCache {
 
   get: (messageId: string, key: string) => Msg | undefined;
 
-  getAll: (messageId: string) => KeyedObject<Msg>;
+  getAll: (messageId: string) => Record<string, Msg>;
 
   remove: (messageId: string, key: string) => void;
 
@@ -39,9 +38,12 @@ interface CachedMsg {
 }
 
 export const createMessageCache = function (
-  timeout: number = DEFAULT_TIMEOUT
+  timeout: number = DEFAULT_TIMEOUT,
 ): MessageCache {
-  const cache: KeyedObject<KeyedObject<CachedMsg | undefined> | undefined> = {};
+  const cache: Record<
+    string,
+    Record<string, CachedMsg | undefined> | undefined
+  > = {};
 
   const invalidateCache = function () {
     const now = new Date();
@@ -77,9 +79,9 @@ export const createMessageCache = function (
   };
 
   const filterCached = function (
-    cached: KeyedObject<CachedMsg | undefined>
-  ): KeyedObject<Msg> {
-    const cleaned: KeyedObject<Msg> = {};
+    cached: Record<string, CachedMsg | undefined>,
+  ): Record<string, Msg> {
+    const cleaned: Record<string, Msg> = {};
     for (const key of Object.keys(cached)) {
       const data = cached[key];
       if (data) {
@@ -91,8 +93,8 @@ export const createMessageCache = function (
   };
 
   const getAllForId = function (
-    id: string
-  ): KeyedObject<CachedMsg | undefined> {
+    id: string,
+  ): Record<string, CachedMsg | undefined> {
     if (!id) {
       return {};
     }
@@ -125,7 +127,7 @@ export const createMessageCache = function (
       }
 
       // We know this is truthy because of above
-      const writeable = cache[messageId] as KeyedObject<CachedMsg>;
+      const writeable = cache[messageId];
 
       writeable[key] = {
         msg: message,

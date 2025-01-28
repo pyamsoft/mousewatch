@@ -23,7 +23,7 @@ const RESERVE_LINK = "https://disneyland.disney.go.com/entry-reservation/";
 
 export const outputParkAvailability = function (
   userId: string | undefined,
-  result: BaseResult
+  result: BaseResult,
 ): string {
   const { parkResponse, magicKey } = result;
 
@@ -33,17 +33,17 @@ export const outputParkAvailability = function (
     : "";
 
   return `${userId ? `<@${userId}> ` : ""}${bold(
-    parkResponse.date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+    parkResponse.date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY),
   )}: ${italic(magicKeyName(magicKey))} reservations are ${bold(
-    parkResponse.available ? "AVAILABLE" : "BLOCKED"
+    parkResponse.available ? "AVAILABLE" : "BLOCKED",
   )}${link}${stopWatching}`;
 };
 
 export const outputParkUnknown = function (
   magicKey: MagicKeyType,
-  date: DateTime
+  date: DateTime,
 ): string {
   return `${bold(
-    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+    date.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY),
   )}: ${italic(magicKeyName(magicKey))} reservations are ${bold("UNKNOWN")}`;
 };
