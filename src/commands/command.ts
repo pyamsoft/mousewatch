@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-import {DateTime} from "luxon";
-import {newLogger} from "../bot/logger";
-import {messageHandlerHelpText, MessageHandlerOutput,} from "../bot/message/MessageHandler";
-import {BotConfig} from "../config";
-import {cleanDate, parseDate} from "../looper/DateParser";
-import {MagicKeyType} from "./model/MagicKeyType";
-import {outputDateErrorText, outputDateMissingText,} from "./outputs/dateerror";
+import { DateTime } from "luxon";
+import { newLogger } from "../bot/logger";
+import {
+  messageHandlerHelpText,
+  MessageHandlerOutput,
+} from "../bot/message/MessageHandler";
+import { BotConfig } from "../config";
+import { cleanDate, parseDate } from "../looper/DateParser";
+import { MagicKeyType } from "./model/MagicKeyType";
+import {
+  outputDateErrorText,
+  outputDateMissingText,
+} from "./outputs/dateerror";
 
 const logger = newLogger("Commands");
 

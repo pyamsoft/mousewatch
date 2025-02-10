@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {newLogger} from "./bot/logger";
+import { newLogger } from "./bot/logger";
 import env from "dotenv";
 
 const logger = newLogger("BotConfig");
@@ -34,9 +34,9 @@ export const sourceConfig = function (): BotConfig {
     token: process.env.BOT_TOKEN || "",
     healthCheckUrl: process.env.BOT_HEALTHCHECK_URL || "",
     targetedChannels: rawSpecificChannel
-        .split(",")
-        .map((s) => s.trim())
-        .filter((s) => s),
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s),
   });
   logger.log("Bot Config: ", config);
   return config;
