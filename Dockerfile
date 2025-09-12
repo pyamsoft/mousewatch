@@ -5,12 +5,8 @@ WORKDIR /mousewatch
 RUN umask 0022
 
 COPY package.json ./
-COPY tsconfig.json ./
-
 COPY pnpm-lock.yaml ./
-
 COPY eslint.config.mjs ./
-
 COPY .env.prod ./.env
 COPY src ./src
 
@@ -18,7 +14,7 @@ COPY src ./src
 RUN chmod 644 .env && corepack enable
 
 # build
-RUN pnpm install && pnpm run build
+RUN pnpm install
 
 # run
-CMD [ "node", "./dist/index.js" ]
+CMD [ "pnpm", "start" ]

@@ -15,7 +15,7 @@
  */
 
 import { newLogger } from "./bot/logger";
-import env from "dotenv";
+import { configDotenv } from "dotenv";
 
 const logger = newLogger("BotConfig");
 
@@ -27,7 +27,8 @@ export interface BotConfig {
 }
 
 export const sourceConfig = function (): BotConfig {
-  env.config();
+  configDotenv();
+
   const rawSpecificChannel = process.env.BOT_TARGET_CHANNEL_IDS || "";
   const config: BotConfig = Object.freeze({
     prefix: process.env.BOT_PREFIX || "$",
