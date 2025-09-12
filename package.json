@@ -16,8 +16,7 @@
     "axios": "1.12.1",
     "discord.js": "14.22.1",
     "dotenv": "17.2.2",
-    "luxon": "3.7.2",
-    "uuid": "13.0.0"
+    "luxon": "3.7.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
