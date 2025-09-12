@@ -36,9 +36,6 @@ importers:
       '@types/node':
         specifier: 24.3.2
         version: 24.3.2
-      '@types/uuid':
-        specifier: 10.0.0
-        version: 10.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: 8.43.0
         version: 8.43.0(@typescript-eslint/parser@8.43.0(eslint@9.35.0)(typescript@5.9.2))(eslint@9.35.0)(typescript@5.9.2)
@@ -186,9 +183,6 @@ packages:
 
   '@types/node@24.3.2':
     resolution: {integrity: sha512-6L8PkB+m1SSb2kaGGFk3iXENxl8lrs7cyVl7AXH6pgdMfulDfM6yUrVdjtxdnGrLrGzzuav8fFnZMY+rcscqcA==}
-
-  '@types/uuid@10.0.0':
-    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
 
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
@@ -909,8 +903,6 @@ snapshots:
   '@types/node@24.3.2':
     dependencies:
       undici-types: 7.10.0
-
-  '@types/uuid@10.0.0': {}
 
   '@types/ws@8.18.1':
     dependencies:
