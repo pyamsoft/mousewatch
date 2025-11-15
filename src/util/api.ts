@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-import axios, { AxiosResponse, RawAxiosRequestHeaders } from "axios";
-
 export const jsonApi = async function <T>(
   url: string,
-  headers?: RawAxiosRequestHeaders,
+  headers?: RequestInit["headers"],
 ): Promise<T> {
-  return axios({
+  return fetch(url, {
     method: "GET",
-    url,
     headers,
-  }).then((r: AxiosResponse<T>) => r.data);
+  }).then((r) => r.json() as T);
 };

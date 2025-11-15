@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-import axios from "axios";
 import { newLogger } from "./bot/logger";
 
 const logger = newLogger("HealthCheck");
 
 const fireHealthCheck = function (url: string) {
   logger.log(`Attempt healthcheck: ${url}`);
-  axios({
+  fetch(url, {
     method: "GET",
-    url,
   })
     .then(() => {
       logger.log(`Healthcheck success!`);
