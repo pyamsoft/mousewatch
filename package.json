@@ -5,7 +5,9 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "vite-node ./src/index.js",
-    "lint": "eslint --report-unused-disable-directives --max-warnings 0 .",
+    "lint:eslint": "eslint --report-unused-disable-directives --max-warnings 0 .",
+    "lint:tsc": "tsc --noEmit",
+    "lint": "$npm_execpath run lint:eslint && $npm_execpath run lint:tsc",
     "format": "prettier --write ."
   },
   "engines": {
