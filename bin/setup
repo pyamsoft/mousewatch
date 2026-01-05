@@ -16,8 +16,7 @@
 # limitations under the License.
 #
 
-readonly NAME="dockerize"
-readonly CONTAINER="pyamsoft/mousewatch"
+readonly NAME="setup"
 
 BIN_DIR="$(dirname "$(realpath "$0")")"
 ROOT_DIR="$(realpath "${BIN_DIR}/..")"
@@ -35,20 +34,30 @@ _log() {
 }
 
 main() {
-
-  _cmd="sudo docker"
-  if command -v podman >/dev/null; then
-    _cmd="podman"
+  if ! command -v corepack >/dev/null 2>&1; then
+    _log 'You must install "corepack"'
+    return 1
   fi
 
-  _log 'Dockerizing %s' "${CONTAINER}"
-  exec ${_cmd} build "${ROOT_DIR}" \
-    -t "${CONTAINER}" \
-    -f "${ROOT_DIR}/Dockerfile" \
-    --rm \
-    --layers \
-    --force-rm \
-    "$@"
+  cd "${ROOT_DIR}" || {
+    _log 'Failed to move into project root: %s' "${ROOT_DIR}"
+    return 1
+  }
+
+  _corepack_target="${ROOT_DIR}/lib"
+  rm -rf "${_corepack_target}" || {
+    printf -- 'Failed to prune corepack install directory: %s' "${_corepack_target}"
+    return 1
+  }
+
+  mkdir -p "${_corepack_target}" || {
+    printf -- 'Failed to prepare corepack install directory: %s' "${_corepack_target}"
+    return 1
+  }
+
+  _log 'Installing pnpm with corepack...'
+  corepack enable --install-directory "${_corepack_target}" || return 1
+  return 0
 }
 
 main "$@" || exit 1
