@@ -45,7 +45,8 @@ main() {
   }
 
   _corepack_target="${ROOT_DIR}/lib"
-  if [ ! -d "${_corepack_target}" ]; then
+  _pnpm="${_corepack_target}/pnpm"
+  if [ ! -d "${_corepack_target}" ] || [ ! -x "${_pnpm}" ]; then
     _log 'Corepack install is missing. Running setup...'
     if [ -x "${BIN_DIR}/setup" ]; then
       "${BIN_DIR}/setup" || {
@@ -55,7 +56,7 @@ main() {
     fi
   fi
 
-  exec "${_corepack_target}/pnpm" "$@"
+  exec "${_pnpm}" "$@"
 }
 
 main "$@" || exit 1
