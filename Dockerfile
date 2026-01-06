@@ -2,19 +2,20 @@ FROM node:24-slim
 
 WORKDIR /mousewatch
 
+# Permissive umask
 RUN umask 0022
 
+# Copy src files
 COPY package.json ./
 COPY pnpm-lock.yaml ./
 COPY eslint.config.mjs ./
-COPY .env.prod ./.env
 COPY src ./src
 
-# Enable corepack
-RUN chmod 644 .env && corepack enable
+# Copy environment for production
+COPY .env.prod ./.env
 
-# build
-RUN pnpm install
+# Build
+RUN corepack enable && pnpm install
 
 # run
 CMD [ "pnpm", "start" ]
