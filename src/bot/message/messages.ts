@@ -136,7 +136,7 @@ export const handleBotMessage = function (
 
     const { handler, id, type } = item;
     if (type === eventType) {
-      let output: Promise<MessageHandlerOutput> | undefined = undefined;
+      let output: Promise<MessageHandlerOutput> | undefined;
       if (handler.objectType === "MessageHandler") {
         output = handler.handle(config, {
           currentCommand: current,
