@@ -14,8 +14,8 @@
     "node": ">=24.x"
   },
   "dependencies": {
-    "discord.js": "14.26.2",
-    "dotenv": "17.4.1",
+    "discord.js": "14.26.3",
+    "dotenv": "17.4.2",
     "luxon": "3.7.2"
   },
   "devDependencies": {
@@ -23,16 +23,16 @@
     "@eslint/js": "10.0.1",
     "@types/luxon": "3.7.1",
     "@types/node": "25.6.0",
-    "@typescript-eslint/eslint-plugin": "8.58.1",
-    "@typescript-eslint/parser": "8.58.1",
-    "eslint": "10.2.0",
-    "globals": "17.4.0",
-    "npm-check-updates": "20.0.1",
-    "prettier": "3.8.2",
+    "@typescript-eslint/eslint-plugin": "8.59.0",
+    "@typescript-eslint/parser": "8.59.0",
+    "eslint": "10.2.1",
+    "globals": "17.5.0",
+    "npm-check-updates": "21.0.3",
+    "prettier": "3.8.3",
     "tslib": "2.8.1",
-    "typescript": "6.0.2",
-    "typescript-eslint": "8.58.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.59.0",
     "vite-node": "6.0.0"
   },
-  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
+  "packageManager": "pnpm@10.33.2"
 }
