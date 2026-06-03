@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "unicorn",
+    "oxc",
+    "promise"
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "react/jsx-no-target-blank": "error"
+  },
+  "env": {
+    "builtin": true
+  }
+}
