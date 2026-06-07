@@ -4,14 +4,14 @@
     "typescript",
     "unicorn",
     "oxc",
+    "import",
+    "node",
     "promise"
   ],
   "categories": {
     "correctness": "error"
   },
-  "rules": {
-    "react/jsx-no-target-blank": "error"
-  },
+  "rules": {},
   "env": {
     "builtin": true
   }
