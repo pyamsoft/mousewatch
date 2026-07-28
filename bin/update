@@ -16,5 +16,14 @@
 # limitations under the License.
 #
 
-exec ./node_modules/.bin/ncu -u || exit 1
+BIN_DIR="$(dirname "$(realpath "$0")")"
+ROOT_DIR="$(realpath "${BIN_DIR}/..")"
+readonly ROOT_DIR
+unset BIN_DIR
+
+main() {
+  exec "${ROOT_DIR}"/node_modules/.bin/ncu -u "$@"
+}
+
+main "$@" || exit 1
 exit 0
