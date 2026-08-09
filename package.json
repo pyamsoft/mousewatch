@@ -23,19 +23,19 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.3.6",
     "@eslint/js": "10.0.1",
-    "@types/luxon": "3.7.3",
-    "@types/node": "26.1.2",
-    "@typescript-eslint/eslint-plugin": "8.65.0",
-    "@typescript-eslint/parser": "8.65.0",
-    "eslint": "10.8.0",
-    "globals": "17.8.0",
-    "npm-check-updates": "23.0.0",
-    "oxlint": "1.76.0",
+    "@types/luxon": "3.7.4",
+    "@types/node": "26.2.0",
+    "@typescript-eslint/eslint-plugin": "8.66.0",
+    "@typescript-eslint/parser": "8.66.0",
+    "eslint": "10.8.1",
+    "globals": "17.9.0",
+    "npm-check-updates": "23.0.2",
+    "oxlint": "1.77.0",
     "prettier": "3.9.6",
     "tslib": "2.8.1",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.65.0",
+    "typescript-eslint": "8.66.0",
     "vite-node": "6.0.0"
   },
-  "packageManager": "pnpm@11.17.0"
+  "packageManager": "pnpm@11.20.0"
 }
