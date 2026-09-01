@@ -28,8 +28,8 @@ importers:
         specifier: 3.7.5
         version: 3.7.5
       '@types/node':
-        specifier: 26.3.0
-        version: 26.3.0
+        specifier: 26.4.0
+        version: 26.4.0
       '@typescript-eslint/eslint-plugin':
         specifier: 8.68.0
         version: 8.68.0(@typescript-eslint/parser@8.68.0(eslint@10.9.1)(typescript@6.0.3))(eslint@10.9.1)(typescript@6.0.3)
@@ -62,7 +62,7 @@ importers:
         version: 8.68.0(eslint@10.9.1)(typescript@6.0.3)
       vite-node:
         specifier: 6.0.0
-        version: 6.0.0(@types/node@26.3.0)
+        version: 6.0.0(@types/node@26.4.0)
 
 packages:
 
@@ -405,8 +405,8 @@ packages:
   '@types/luxon@3.7.5':
     resolution: {integrity: sha512-jJ41Q4z6ZVO260MNDdHfW7+7a5iMiX8Mr6ZJHcmgrvhZha6dz5704o/lF2kKl6URjH6ivEL97w9xS/MgpJEphg==}
 
-  '@types/node@26.3.0':
-    resolution: {integrity: sha512-L3fgrnchriRC2ExBflb8j4uZZURHZfQsmQeyVzhjcHW4kkwVyo8/0h1B2MVzMTrYUJYu6G7EWs14hW/L9putqw==}
+  '@types/node@26.4.0':
+    resolution: {integrity: sha512-faiGnoIrLH/V8cibOMEAZ8pMw6oXqSukl29ra4mN8GdaB2ZewzeaLj+INpV5N+Z1eKWzY+IzaIZH2EIR6YZRNQ==}
 
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
@@ -1265,13 +1265,13 @@ snapshots:
 
   '@types/luxon@3.7.5': {}
 
-  '@types/node@26.3.0':
+  '@types/node@26.4.0':
     dependencies:
       undici-types: 8.3.0
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 26.3.0
+      '@types/node': 26.4.0
 
   '@typescript-eslint/eslint-plugin@8.68.0(@typescript-eslint/parser@8.68.0(eslint@10.9.1)(typescript@6.0.3))(eslint@10.9.1)(typescript@6.0.3)':
     dependencies:
@@ -1805,13 +1805,13 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite-node@6.0.0(@types/node@26.3.0):
+  vite-node@6.0.0(@types/node@26.4.0):
     dependencies:
       cac: 7.0.0
       es-module-lexer: 2.3.2
       obug: 2.1.4
       pathe: 2.0.3
-      vite: 8.2.2(@types/node@26.3.0)
+      vite: 8.2.2(@types/node@26.4.0)
     transitivePeerDependencies:
       - '@types/node'
       - '@vitejs/devtools'
@@ -1826,7 +1826,7 @@ snapshots:
       - tsx
       - yaml
 
-  vite@8.2.2(@types/node@26.3.0):
+  vite@8.2.2(@types/node@26.4.0):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -1834,7 +1834,7 @@ snapshots:
       rolldown: 1.2.5
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.3.0
+      '@types/node': 26.4.0
       fsevents: 2.3.3
 
   which@2.0.2:
