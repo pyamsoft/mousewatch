@@ -5,7 +5,8 @@
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
-    "start": "vite-node ./src/index.js",
+    "dev": "vite-node --mode development ./src/index.js",
+    "prod": "vite-node --mode production ./src/index.js",
     "lint:eslint": "eslint --report-unused-disable-directives --max-warnings 0 --cache --cache-strategy content .",
     "lint:oxlint": "oxlint --deny-warnings .",
     "lint:tsc": "tsc --strict --noEmit",

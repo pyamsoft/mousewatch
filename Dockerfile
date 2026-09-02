@@ -18,4 +18,4 @@ COPY .env.prod ./.env
 RUN corepack enable && pnpm install
 
 # run
-CMD [ "pnpm", "start" ]
+CMD [ "pnpm", "prod" ]
