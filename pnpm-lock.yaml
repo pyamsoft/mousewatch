@@ -170,8 +170,8 @@ importers:
         specifier: 14.27.0
         version: 14.27.0
       dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
+        specifier: 18.0.4
+        version: 18.0.4
       luxon:
         specifier: 3.7.2
         version: 3.7.2
@@ -718,9 +718,10 @@ packages:
     resolution: {integrity: sha512-qHbFlFG2N7y3LjPySYsL6A1+BnX6bkTVgo842EX0CqVPk/KTMwZkojPHEXKsQUpWZNyz5BISNHK1cPpQw0+m4A==}
     engines: {node: '>=18'}
 
-  dotenv@17.4.2:
-    resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
+  dotenv@18.0.4:
+    resolution: {integrity: sha512-jGt9uI5BIxpVO15kvy+iEFqNAwxYClKWnkptLjSNPnFLC003Imd0ofr3aEVsbpHdSBdSsbcApNIlz4nbyGMwdA==}
     engines: {node: '>=12'}
+    hasBin: true
 
   es-module-lexer@2.3.2:
     resolution: {integrity: sha512-poHGpORABojJJucnV9KbOavETW8lBVnphkW77ER5/BQ5Fz7oXSoCNek7IH3vR5nRjdsEz926ibFYX8KtLQmdyw==}
@@ -1648,7 +1649,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  dotenv@17.4.2: {}
+  dotenv@18.0.4: {}
 
   es-module-lexer@2.3.2: {}
 
