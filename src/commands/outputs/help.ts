@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import packageJson from "../../../package.json" with { type: "json" };
 import { BotConfig } from "../../config";
 import { codeBlock } from "../../bot/discord/format";
 
@@ -21,7 +22,7 @@ export const outputHelpText = function (config: BotConfig): string {
   const { prefix } = config;
 
   return codeBlock(`
-Beep Boop.
+Beep Boop. (${packageJson.version})
 
 [COMMANDS]
 ${prefix}                   This help
