@@ -147,7 +147,7 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
 
       const errorHandler = function (error: Error) {
         logger.error(error, "BOT ERROR");
-        client.off("ready", readyHandler);
+        client.off("clientReady", readyHandler);
 
         client.off(MessageEventTypes.CREATE, messageHandler);
         client.off(MessageEventTypes.UPDATE, messageUpdateHandler);
@@ -160,10 +160,10 @@ export const initializeBot = function (config: BotConfig): DiscordBot {
       client.on("error", errorHandler);
 
       logger.log("Wait until bot is ready");
-      client.once("ready", readyHandler);
+      client.once("clientReady", readyHandler);
       return newListener(() => {
         logger.log("Stop watching for messages");
-        client.off("ready", readyHandler);
+        client.off("clientReady", readyHandler);
 
         client.off(MessageEventTypes.CREATE, messageHandler);
         client.off(MessageEventTypes.UPDATE, messageUpdateHandler);
