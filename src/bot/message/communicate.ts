@@ -186,8 +186,8 @@ const editExistingMessage = function (
             key: cacheKey,
           });
           cache.insert(receivedMessageId, cacheKey, newMessage);
-          resolve(newMessage);
         }
+        resolve(newMessage);
       })
       .catch((e) => {
         logger.error(e, "Unable to update old message with new content: ", {
