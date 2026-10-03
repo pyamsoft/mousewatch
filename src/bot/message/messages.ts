@@ -148,7 +148,7 @@ export const handleBotMessage = function (
           "Handler type cannot handle bot messages: ",
           handler.objectType,
         );
-        return;
+        continue;
       }
 
       if (output) {
@@ -198,7 +198,7 @@ export const handleBotMessageReaction = function (
           "Handler type cannot handle bot reactions: ",
           handler.objectType,
         );
-        return;
+        continue;
       }
     }
   }
