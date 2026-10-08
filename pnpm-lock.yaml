@@ -228,8 +228,8 @@ importers:
         specifier: 3.7.6
         version: 3.7.6
       '@types/node':
-        specifier: 26.6.3
-        version: 26.6.3
+        specifier: 26.6.4
+        version: 26.6.4
       '@typescript-eslint/eslint-plugin':
         specifier: 8.71.0
         version: 8.71.0(@typescript-eslint/parser@8.71.0(eslint@10.12.0)(typescript@6.0.3))(eslint@10.12.0)(typescript@6.0.3)
@@ -262,7 +262,7 @@ importers:
         version: 8.71.0(eslint@10.12.0)(typescript@6.0.3)
       vite-node:
         specifier: 6.0.0
-        version: 6.0.0(@types/node@26.6.3)
+        version: 6.0.0(@types/node@26.6.4)
 
 packages:
 
@@ -622,6 +622,9 @@ packages:
 
   '@types/node@26.6.3':
     resolution: {integrity: sha512-dsqMQQoeTLqu9wynDD00q573mNzso3IdQOAfHRJqLCcmCFPoGo9A1bDpUcv/9tnKpErQWv9uKeGfl37EIS02Yg==}
+
+  '@types/node@26.6.4':
+    resolution: {integrity: sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg==}
 
   '@types/ws@8.18.2':
     resolution: {integrity: sha512-67MQl+fpWKVTT1NYdnmo3U4sc/xPo/zQBncVnI74qmQa0z/b+1g6iYqNmGCPbxO+zz2aklb08a0oHfegiVd0/w==}
@@ -1517,6 +1520,10 @@ snapshots:
     dependencies:
       undici-types: 8.9.0
 
+  '@types/node@26.6.4':
+    dependencies:
+      undici-types: 8.9.0
+
   '@types/ws@8.18.2':
     dependencies:
       '@types/node': 26.6.3
@@ -2072,13 +2079,13 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite-node@6.0.0(@types/node@26.6.3):
+  vite-node@6.0.0(@types/node@26.6.4):
     dependencies:
       cac: 7.0.0
       es-module-lexer: 2.3.2
       obug: 2.2.1
       pathe: 2.0.3
-      vite: 8.3.1(@types/node@26.6.3)
+      vite: 8.3.1(@types/node@26.6.4)
     transitivePeerDependencies:
       - '@types/node'
       - '@vitejs/devtools'
@@ -2093,7 +2100,7 @@ snapshots:
       - tsx
       - yaml
 
-  vite@8.3.1(@types/node@26.6.3):
+  vite@8.3.1(@types/node@26.6.4):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -2101,7 +2108,7 @@ snapshots:
       rolldown: 1.2.12
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.6.3
+      '@types/node': 26.6.4
       fsevents: 2.3.3
 
   which@2.0.2:
