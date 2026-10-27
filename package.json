@@ -18,25 +18,26 @@
   },
   "dependencies": {
     "discord.js": "14.27.0",
-    "dotenv": "18.0.6",
+    "dotenv": "18.0.9",
     "luxon": "3.7.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.7",
     "@eslint/js": "10.0.1",
     "@types/luxon": "3.7.6",
-    "@types/node": "26.6.4",
-    "@typescript-eslint/eslint-plugin": "8.71.1",
-    "@typescript-eslint/parser": "8.71.1",
-    "eslint": "10.12.0",
+    "@types/node": "26.6.5",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/parser": "8.72.1",
+    "eslint": "10.13.0",
     "globals": "17.13.0",
-    "npm-check-updates": "23.1.0",
-    "oxlint": "1.87.0",
-    "prettier": "3.9.9",
+    "npm-check-updates": "23.1.1",
+    "oxlint": "1.89.0",
+    "prettier": "3.9.10",
     "tslib": "2.8.1",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.71.1",
-    "vite-node": "6.0.0"
+    "typescript-eslint": "8.72.1",
+    "vite-node": "6.0.0",
+    "typescript": "npm:@typescript/typescript6@6.0.2",
+    "typescript-7": "npm:typescript@7.0.2"
   },
-  "packageManager": "pnpm@12.10.1"
+  "packageManager": "pnpm@12.15.0"
 }
