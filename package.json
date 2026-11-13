@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "discord.js": "14.28.1",
-    "dotenv": "18.0.9",
+    "dotenv": "18.0.10",
     "luxon": "3.7.2"
   },
   "devDependencies": {
@@ -26,15 +26,15 @@
     "@eslint/js": "10.0.1",
     "@types/luxon": "3.7.6",
     "@types/node": "26.6.6",
-    "@typescript-eslint/eslint-plugin": "8.72.1",
-    "@typescript-eslint/parser": "8.72.1",
+    "@typescript-eslint/eslint-plugin": "8.72.2",
+    "@typescript-eslint/parser": "8.72.2",
     "eslint": "10.14.0",
     "globals": "17.14.0",
     "npm-check-updates": "23.1.1",
-    "oxlint": "1.91.0",
-    "prettier": "3.9.10",
+    "oxlint": "1.93.0",
+    "prettier": "3.10.1",
     "tslib": "2.9.1",
-    "typescript-eslint": "8.72.1",
+    "typescript-eslint": "8.72.2",
     "vite-node": "6.0.0",
     "typescript": "npm:@typescript/typescript6@6.0.2",
     "typescript-7": "npm:typescript@7.0.2"
